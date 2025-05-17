@@ -1,29 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-@import 'tailwindcss';
 
-@theme {
-  /* colors */
-  --color-neutral-900: #21214d;
-  --color-neutral-600: #57577b;
-  --color-neutral-300: #9393b7;
-  --color-neutral-200: #cbcdd0;
-  --color-neutral-0: #ffffff;
-  --color-blue-700: #2a4cd5;
-  --color-blue-600: #4865db;
-  --color-blue-300: #89caff;
-  --color-blue-200: #c7d3f7;
-  --color-blue-100: #e0e6fa;
-  --color-red-700: #e60013;
-  --color-red-300: #ff9b99;
-  --color-indigo-200: #b8b1ff;
-  --color-green-300: #89e780;
-  --color-amber-300: #ffc97c;
-}
-
-@layer base {
-  body {
-    background-image: linear-gradient(180deg, #f5f5ff 72.99%, #e0e0ff 100%);
-    font-family: 'Reddit Sans', sans-serif;
-    color: var(--color-neutral-900);
-  }
+body {
+  background-image: linear-gradient(180deg, #f5f5ff 72.99%, #e0e0ff 100%);
+  background-repeat: no-repeat;
+  font-family: 'Reddit Sans', sans-serif;
+  color: #21214d;
 }
