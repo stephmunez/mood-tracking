@@ -32,11 +32,11 @@
         type="submit"
         class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
       >
-        Log In
+        Sign Up
       </button>
       <p class="text-lg leading-[1.4] tracking-[-0.3px] text-neutral-600">
-        Haven't got an account?
-        <NuxtLink to="/sign-up" class="text-blue-600">Sign up.</NuxtLink>
+        Already got an account?
+        <NuxtLink to="/log-in" class="text-blue-600">Log in.</NuxtLink>
       </p>
     </div>
   </form>

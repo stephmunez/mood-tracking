@@ -18,7 +18,7 @@
           Join to track your daily mood and sleep with ease.
         </p>
       </div>
-      <LoginForm />
+      <SignupForm />
     </main>
   </div>
 </template>
