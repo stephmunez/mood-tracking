@@ -35,8 +35,8 @@
         Sign Up
       </button>
       <p class="text-lg leading-[1.4] tracking-[-0.3px] text-neutral-600">
-        Haven't got an account?
-        <NuxtLink to="/sign-up" class="text-blue-600">Sign up.</NuxtLink>
+        Already got an account?
+        <NuxtLink to="/log-in" class="text-blue-600">Log in.</NuxtLink>
       </p>
     </div>
   </form>

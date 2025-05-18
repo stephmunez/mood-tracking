@@ -18,7 +18,7 @@
           Log in to continue tracking your mood and sleep.
         </p>
       </div>
-      <SignupForm />
+      <LoginForm />
     </main>
   </div>
 </template>
