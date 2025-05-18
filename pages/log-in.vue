@@ -1,7 +1,24 @@
 <template>
-  <div class="bg-light-gradient h-screen">
-    <h1 class="text-3xl font-bold underline text-light-gradient">
-      Log in Page
-    </h1>
+  <div
+    class="flex min-h-screen w-full flex-col items-center justify-center gap-8 px-4 py-20"
+  >
+    <Logo />
+    <main
+      class="flex w-full flex-col gap-8 rounded-2xl bg-neutral-0 px-4 py-10 text-neutral-500 shadow-[0_8px_16px_rgba(32,37,41,0.08)]"
+    >
+      <div class="flex w-full flex-col gap-2">
+        <h1
+          class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900"
+        >
+          Welcome back!
+        </h1>
+        <p
+          class="text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600"
+        >
+          Log in to continue tracking your mood and sleep.
+        </p>
+      </div>
+      <SignupForm />
+    </main>
   </div>
 </template>
