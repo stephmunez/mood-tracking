@@ -22,3 +22,9 @@
     </main>
   </div>
 </template>
+
+<script setup>
+useHead({
+  title: "Mood Tracking | Sign Up",
+});
+</script>
