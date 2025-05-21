@@ -1,6 +1,7 @@
 <template>
   <div class="flex min-h-screen w-full flex-col gap-16 pb-20">
     <Heading />
+    <Main />
   </div>
 </template>
 
