@@ -142,16 +142,40 @@
               </div>
 
               <!-- Step 4 -->
-              <div
-                v-else-if="currentStep === 4"
-                class="flex flex-col gap-4 text-center"
-              >
-                <h3 class="text-2xl font-semibold text-neutral-900">
-                  All done! 🎉
+              <div v-if="currentStep === 4" class="flex flex-col gap-4">
+                <h3
+                  class="text-[1.75rem] font-bold leading-[1.3] tracking-[-0.3px] text-neutral-900"
+                >
+                  How was your mood today?
                 </h3>
-                <p class="text-neutral-600">
-                  You successfully logged your mood.
-                </p>
+
+                <div class="flex w-full flex-col justify-between gap-3">
+                  <button
+                    v-for="hour in hours"
+                    :key="hour.value"
+                    @click="selectHour(hour.value)"
+                    :class="[
+                      'flex items-center justify-between rounded-[10px] border-2 border-solid bg-neutral-0 px-4 py-3 text-center transition-colors duration-300',
+                      selectedHour === hour.value
+                        ? 'border-blue-600'
+                        : 'border-blue-200',
+                    ]"
+                  >
+                    <div class="flex w-full items-center gap-3">
+                      <div
+                        :class="[
+                          'h-5 w-5 rounded-full border-solid transition-colors duration-300',
+                          selectedHour === hour.value
+                            ? 'border-4 border-blue-600'
+                            : 'border-[1.5px] border-blue-200',
+                        ]"
+                      ></div>
+                      <span class="text-xl font-semibold text-neutral-900">{{
+                        hour.label
+                      }}</span>
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
           </Transition>
@@ -159,7 +183,7 @@
           <!-- Buttons -->
           <div class="flex items-center justify-between gap-3">
             <button
-              v-if="currentStep > 1 && currentStep < 4"
+              v-if="currentStep > 1"
               class="w-full rounded-[10px] border border-blue-600 px-8 py-4 text-2xl font-normal text-blue-600"
               @click="currentStep--"
             >
@@ -181,10 +205,11 @@
 
             <button
               v-if="currentStep === 4"
-              class="ml-auto rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-white"
-              @click="emitClose"
+              class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+              @click="handleSubmit"
+              :disabled="selectedHour === null"
             >
-              Done
+              Submit
             </button>
           </div>
 
@@ -208,9 +233,9 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 
 const selectedMood = ref(null);
-const stepTwoInput = ref("");
 const selectedFeelings = ref([]);
 const journalEntry = ref("");
+const selectedHour = ref(null);
 const currentStep = ref(1);
 
 const moods = [
@@ -244,6 +269,14 @@ const feelings = [
   "Restless",
 ];
 
+const hours = [
+  { value: 9, label: "9+ hours" },
+  { value: 7.5, label: "7-8 hours" },
+  { value: 5.5, label: "5-6 hours" },
+  { value: 3.5, label: "3-4 hours" },
+  { value: 1, label: "0-2 hours" },
+];
+
 const selectMood = (value) => {
   selectedMood.value = value;
 };
@@ -256,6 +289,10 @@ const toggleFeeling = (value) => {
   }
 };
 
+const selectHour = (value) => {
+  selectedHour.value = value;
+};
+
 const nextStep = () => {
   if (currentStep.value < 4) {
     currentStep.value++;
@@ -265,10 +302,23 @@ const nextStep = () => {
 const emitClose = () => {
   emit("close");
   selectedMood.value = null;
-  stepTwoInput.value = "";
   selectedFeelings.value = [];
   journalEntry.value = "";
+  selectedHour.value = "";
   currentStep.value = 1;
+};
+
+const handleSubmit = () => {
+  const moodEntry = {
+    createdAt: new Date().toISOString(),
+    mood: selectedMood.value,
+    feelings: [...selectedFeelings.value],
+    journalEntry: journalEntry.value,
+    sleepHours: selectedHour.value,
+  };
+
+  emitClose();
+  console.log(moodEntry);
 };
 </script>
 
