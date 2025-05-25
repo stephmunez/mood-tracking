@@ -65,9 +65,9 @@
                             : 'border-[1.5px] border-blue-200',
                         ]"
                       ></div>
-                      <span class="text-xl font-semibold text-neutral-900">
-                        {{ mood.label }}
-                      </span>
+                      <span class="text-xl font-semibold text-neutral-900">{{
+                        mood.label
+                      }}</span>
                     </div>
                     <NuxtImg :src="mood.image" width="38" height="38" />
                   </button>
@@ -76,15 +76,56 @@
 
               <!-- Step 2 -->
               <div v-else-if="currentStep === 2" class="flex flex-col gap-4">
-                <h3 class="text-[1.75rem] font-bold text-neutral-900">
-                  What affected your mood?
-                </h3>
-                <input
-                  v-model="stepTwoInput"
-                  type="text"
-                  placeholder="E.g. Work, Family, Health"
-                  class="rounded-md border border-blue-300 px-4 py-2"
-                />
+                <div class="flex w-full flex-col gap-1">
+                  <h3 class="text-[1.75rem] font-bold text-neutral-900">
+                    How did you feel??
+                  </h3>
+                  <p
+                    class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
+                  >
+                    Select up to three tags:
+                  </p>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                  <label
+                    v-for="feeling in feelings"
+                    :key="feeling"
+                    :class="[
+                      'flex cursor-pointer items-center gap-3 rounded-[10px] border-2 border-solid bg-neutral-0 px-3 py-2 transition-colors duration-300',
+                      selectedFeelings.includes(feeling)
+                        ? 'border-blue-600'
+                        : 'border-blue-200',
+                    ]"
+                  >
+                    <input
+                      type="checkbox"
+                      :value="feeling"
+                      :checked="selectedFeelings.includes(feeling)"
+                      @change="toggleFeeling(feeling)"
+                      class="hidden"
+                    />
+                    <div
+                      class="flex h-5 w-5 items-center justify-center rounded-[4px] border-2 transition-colors duration-300"
+                      :class="
+                        selectedFeelings.includes(feeling)
+                          ? 'border-blue-600 bg-blue-600'
+                          : 'border-neutral-300 bg-neutral-0'
+                      "
+                    >
+                      <NuxtImg
+                        src="/images/icon-check.svg"
+                        width="12"
+                        height="10"
+                        v-if="selectedFeelings.includes(feeling)"
+                      />
+                    </div>
+                    <span
+                      class="text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
+                      >{{ feeling }}</span
+                    >
+                  </label>
+                </div>
               </div>
 
               <!-- Step 3 -->
@@ -126,8 +167,11 @@
 
             <button
               v-if="currentStep < 4"
-              class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-white disabled:opacity-50"
-              :disabled="currentStep === 1 && selectedMood === null"
+              class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+              :disabled="
+                (currentStep === 1 && selectedMood === null) ||
+                (currentStep === 2 && selectedFeelings.length === 0)
+              "
               @click="nextStep"
             >
               Continue
@@ -163,6 +207,7 @@ const emit = defineEmits(["close"]);
 
 const selectedMood = ref(null);
 const stepTwoInput = ref("");
+const selectedFeelings = ref([]);
 const journalEntry = ref("");
 const currentStep = ref(1);
 
@@ -174,8 +219,39 @@ const moods = [
   { value: -2, image: "/images/icon-very-sad-color.svg", label: "Very Sad" },
 ];
 
+const feelings = [
+  "Joyful",
+  "Down",
+  "Anxious",
+  "Calm",
+  "Excited",
+  "Frustrated",
+  "Lonely",
+  "Grateful",
+  "Overwhelmed",
+  "Motivated",
+  "Irritable",
+  "Peaceful",
+  "Tired",
+  "Hopeful",
+  "Confident",
+  "Stressed",
+  "Content",
+  "Disappointed",
+  "Optimistic",
+  "Restless",
+];
+
 const selectMood = (value) => {
   selectedMood.value = value;
+};
+
+const toggleFeeling = (value) => {
+  if (selectedFeelings.value.includes(value)) {
+    selectedFeelings.value = selectedFeelings.value.filter((v) => v !== value);
+  } else if (selectedFeelings.value.length < 3) {
+    selectedFeelings.value.push(value);
+  }
 };
 
 const nextStep = () => {
@@ -188,6 +264,7 @@ const emitClose = () => {
   emit("close");
   selectedMood.value = null;
   stepTwoInput.value = "";
+  selectedFeelings.value = [];
   journalEntry.value = "";
   currentStep.value = 1;
 };
