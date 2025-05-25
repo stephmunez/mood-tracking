@@ -131,12 +131,13 @@
               <!-- Step 3 -->
               <div v-else-if="currentStep === 3" class="flex flex-col gap-4">
                 <h3 class="text-[1.75rem] font-bold text-neutral-900">
-                  Want to write about it?
+                  Write about your day...
                 </h3>
                 <textarea
                   v-model="journalEntry"
-                  placeholder="Write your thoughts here..."
-                  class="min-h-[120px] rounded-md border border-blue-300 px-4 py-2"
+                  placeholder="Today, I felt..."
+                  class="min-h-[150px] rounded-[10px] border border-solid border-neutral-300 bg-neutral-0 px-4 py-3 text-lg font-medium leading-[1.3] tracking-normal transition-colors duration-300 placeholder:italic focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-blue-600"
+                  maxlength="150"
                 />
               </div>
 
@@ -170,7 +171,8 @@
               class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50"
               :disabled="
                 (currentStep === 1 && selectedMood === null) ||
-                (currentStep === 2 && selectedFeelings.length === 0)
+                (currentStep === 2 && selectedFeelings.length === 0) ||
+                (currentStep === 3 && journalEntry.length === 0)
               "
               @click="nextStep"
             >
