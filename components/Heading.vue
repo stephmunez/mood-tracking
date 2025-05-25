@@ -31,6 +31,7 @@
 
     <button
       class="h-14 w-56 rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
+      @click="$emit('openmodal')"
     >
       Log today's mood
     </button>
