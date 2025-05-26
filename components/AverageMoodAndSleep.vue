@@ -15,7 +15,46 @@
           >(Last 5 Check-ins)</span
         >
       </div>
+
       <div
+        v-if="lastFiveMoodAvg !== null"
+        :class="[
+          'relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-no-repeat px-4 py-5',
+          moodSummary.bgClass,
+        ]"
+      >
+        <div class="flex w-full items-center gap-4">
+          <NuxtImg :src="moodSummary.img" width="24" height="24" />
+          <span
+            class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
+          >
+            {{ moodSummary.title }}
+          </span>
+        </div>
+
+        <div
+          v-if="moodComparison !== null"
+          class="flex w-full items-center gap-2"
+        >
+          <NuxtImg :src="moodComparison.img" width="16" height="16" />
+          <span
+            class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
+            >{{ moodComparison.text }}</span
+          >
+        </div>
+
+        <div
+          class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
+        >
+          <NuxtImg
+            src="/images/bg-pattern-averages.svg"
+            width="243"
+            height="251"
+          />
+        </div>
+      </div>
+      <div
+        v-else
         class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-100 bg-no-repeat px-4 py-5"
       >
         <span
@@ -75,3 +114,93 @@
     </div>
   </section>
 </template>
+
+<script setup>
+const { moodEntries } = defineProps({
+  moodEntries: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+const lastFiveMoodAvg = computed(() => {
+  const lastFive = moodEntries.slice(-5);
+
+  if (lastFive.length < 5) {
+    return null;
+  } else {
+    const sum = lastFive.reduce((acc, entry) => acc + entry.mood, 0);
+    return sum / lastFive.length;
+  }
+});
+
+const previousFiveMoodAvg = computed(() => {
+  if (moodEntries.length < 10) return null;
+
+  const previousFive = moodEntries.slice(-10, -5);
+  const sum = previousFive.reduce((acc, entry) => acc + entry.mood, 0);
+  return sum / previousFive.length;
+});
+
+const moodSummary = computed(() => {
+  const average = lastFiveMoodAvg.value;
+
+  if (average < -1) {
+    return {
+      bgClass: "bg-red-300",
+      img: "/images/icon-very-sad-white.svg",
+      title: "Very Sad",
+    };
+  } else if (average < 0) {
+    return {
+      bgClass: "bg-indigo-200",
+      img: "/images/icon-sad-white.svg",
+      title: "Sad",
+    };
+  } else if (average <= 0) {
+    return {
+      bgClass: "bg-blue-300",
+      img: "/images/icon-neutral-white.svg",
+      title: "Neutral",
+    };
+  } else if (average <= 1) {
+    return {
+      bgClass: "bg-green-300",
+      img: "/images/icon-happy-white.svg",
+      title: "Happy",
+    };
+  } else {
+    return {
+      bgClass: "bg-amber-300",
+      img: "/images/icon-very-happy-white.svg",
+      title: "Very Happy",
+    };
+  }
+});
+
+const moodComparison = computed(() => {
+  if (previousFiveMoodAvg.value === null) return null;
+
+  const current = lastFiveMoodAvg.value;
+  const previous = previousFiveMoodAvg.value;
+
+  const diff = current - previous;
+
+  if (Math.abs(diff) < 0.01) {
+    return {
+      text: "Same as the previous 5 check-ins",
+      img: "/images/icon-trend-same.svg",
+    };
+  } else if (diff > 0) {
+    return {
+      text: "Increase from the previous 5 check-in",
+      img: "/images/icon-trend-increase.svg",
+    };
+  } else {
+    return {
+      text: "Decrease from the previous 5 check-ins",
+      img: "/images/icon-trend-decrease.svg",
+    };
+  }
+});
+</script>
