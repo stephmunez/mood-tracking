@@ -91,6 +91,41 @@
         >
       </div>
       <div
+        v-if="lastFiveSleepAvg !== null"
+        class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-600 bg-no-repeat px-4 py-5"
+      >
+        <div class="flex w-full items-center gap-4">
+          <IconSleep fill="#FFFFFF" width="24" height="24" />
+          <span
+            class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-0"
+          >
+            {{ sleepSummary }}
+          </span>
+        </div>
+
+        <div
+          v-if="sleepComparison !== null"
+          class="flex w-full items-center gap-2"
+        >
+          <NuxtImg :src="sleepComparison.img" width="16" height="16" />
+          <span
+            class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-0"
+            >{{ sleepComparison.text }}</span
+          >
+        </div>
+
+        <div
+          class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
+        >
+          <NuxtImg
+            src="/images/bg-pattern-averages.svg"
+            width="243"
+            height="251"
+          />
+        </div>
+      </div>
+      <div
+        v-else
         class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-100 bg-no-repeat px-4 py-5"
       >
         <span
@@ -134,11 +169,30 @@ const lastFiveMoodAvg = computed(() => {
   }
 });
 
+const lastFiveSleepAvg = computed(() => {
+  const lastFive = moodEntries.slice(-5);
+
+  if (lastFive.length < 5) {
+    return null;
+  } else {
+    const sum = lastFive.reduce((acc, entry) => acc + entry.sleepHours, 0);
+    return sum / lastFive.length;
+  }
+});
+
 const previousFiveMoodAvg = computed(() => {
   if (moodEntries.length < 10) return null;
 
   const previousFive = moodEntries.slice(-10, -5);
   const sum = previousFive.reduce((acc, entry) => acc + entry.mood, 0);
+  return sum / previousFive.length;
+});
+
+const previousFiveSleepAvg = computed(() => {
+  if (moodEntries.length < 10) return null;
+
+  const previousFive = moodEntries.slice(-10, -5);
+  const sum = previousFive.reduce((acc, entry) => acc + entry.sleepHours, 0);
   return sum / previousFive.length;
 });
 
@@ -178,6 +232,22 @@ const moodSummary = computed(() => {
   }
 });
 
+const sleepSummary = computed(() => {
+  const average = lastFiveSleepAvg.value;
+
+  if (average < 3) {
+    return "0–2 Hours";
+  } else if (average < 5) {
+    return "3–4 Hours";
+  } else if (average < 7) {
+    return "5–6 Hours";
+  } else if (average < 9) {
+    return "7–8 Hours";
+  } else {
+    return "9+ Hours";
+  }
+});
+
 const moodComparison = computed(() => {
   if (previousFiveMoodAvg.value === null) return null;
 
@@ -200,6 +270,32 @@ const moodComparison = computed(() => {
     return {
       text: "Decrease from the previous 5 check-ins",
       img: "/images/icon-trend-decrease.svg",
+    };
+  }
+});
+
+const sleepComparison = computed(() => {
+  if (previousFiveSleepAvg.value === null) return null;
+
+  const current = lastFiveSleepAvg.value;
+  const previous = previousFiveSleepAvg.value;
+
+  const diff = current - previous;
+
+  if (Math.abs(diff) < 0.01) {
+    return {
+      text: "Same as the previous 5 check-ins",
+      img: "/images/icon-trend-same-white.svg",
+    };
+  } else if (diff > 0) {
+    return {
+      text: "Increase from the previous 5 check-in",
+      img: "/images/icon-trend-increase-white.svg",
+    };
+  } else {
+    return {
+      text: "Decrease from the previous 5 check-ins",
+      img: "/images/icon-trend-decrease-white.svg",
     };
   }
 });
