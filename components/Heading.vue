@@ -25,7 +25,8 @@
       </h1>
       <span
         class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
-        >Wednesday, April 16th, 2025</span
+      >
+        {{ todayString }}</span
       >
     </div>
 
@@ -112,6 +113,54 @@
 <script setup>
 const { moodEntries } = useMoodEntriesStore();
 const moodQuote = ref(null);
+
+function getOrdinalSuffix(day) {
+  if (day > 3 && day < 21) return "th";
+  switch (day % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+}
+
+function formatDateWithOrdinal(date) {
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const suffix = getOrdinalSuffix(day);
+  return `${dayOfWeek}, ${month} ${day}${suffix}, ${year}`;
+}
+
+const todayString = formatDateWithOrdinal(new Date());
 
 const isToday = (dateString) => {
   const today = new Date();
