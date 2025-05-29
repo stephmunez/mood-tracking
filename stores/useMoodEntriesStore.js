@@ -111,6 +111,13 @@ export const useMoodEntriesStore = defineStore("mood-entries", {
           journalEntry: "Woke up early and finally tackled a big project!",
           sleepHours: 9,
         },
+        {
+          createdAt: "2025-05-29T11:00:00Z",
+          mood: 2,
+          feelings: ["Grateful", "Optimistic"],
+          journalEntry: "Woke up early and finally tackled a big project!",
+          sleepHours: 9,
+        },
       ],
     };
   },
