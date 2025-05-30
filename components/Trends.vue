@@ -79,21 +79,99 @@
           </div>
           <div
             class="absolute bottom-12 left-0 flex min-w-[614px] items-end gap-4"
+            @click.self="selectedBarPopover >= 0 && (selectedBarPopover = null)"
           >
             <div
               v-for="(trend, index) in moodAndSleepTrends"
               :key="index"
-              class="relative w-10 rounded-full transition-all duration-300"
+              class="relative w-10 cursor-pointer rounded-full transition-all duration-300"
               :style="{
                 height: trend.height + 'px',
                 backgroundColor: trend.color,
               }"
+              @click="
+                () => {
+                  selectedBarPopover = index;
+                }
+              "
             >
               <div
                 v-if="trend.height > 0"
                 class="absolute left-[5px] top-[5px]"
               >
                 <NuxtImg :src="trend.icon" width="30" height="30" />
+              </div>
+
+              <div
+                v-if="selectedBarPopover === index"
+                class="absolute z-50 flex w-44 flex-col gap-3 rounded-[10px] border border-solid border-blue-100 bg-white p-3 shadow-[0_4px_7px_rgba(32,33,77,0.16)]"
+                :style="{
+                  top: `${trend.height - 262}px`,
+                  right: `${index < 4 ? -184 : 48}px`,
+                }"
+              >
+                <div class="flex w-full flex-col gap-2">
+                  <h3
+                    class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                  >
+                    Mood
+                  </h3>
+                  <div class="flex items-center gap-[0.375rem]">
+                    <NuxtImg :src="trend.iconColored" width="16" height="16" />
+                    <span
+                      class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                      >{{ trend.moodLabel }}</span
+                    >
+                  </div>
+                </div>
+                <div class="flex w-full flex-col gap-2">
+                  <h3
+                    class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                  >
+                    Sleep
+                  </h3>
+                  <span
+                    class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                    >{{ trend.sleepLabel }}</span
+                  >
+                </div>
+                <div class="flex w-full flex-col gap-2">
+                  <h3
+                    class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                  >
+                    Reflection
+                  </h3>
+                  <span
+                    class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                    >{{ trend.journalEntry }}</span
+                  >
+                </div>
+                <div class="flex w-full flex-col gap-2">
+                  <h3
+                    class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                  >
+                    Tags
+                  </h3>
+                  <span
+                    class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                    >{{ trend.feelings.join(", ") }}</span
+                  >
+                </div>
+
+                <div
+                  class="absolute z-50 h-3 w-3"
+                  :style="{
+                    bottom: `${trend.height - 40}px`,
+                    right: `${index < 4 ? 171 : -8}px`,
+                    transform: `${index < 4 ? 'scaleX(-1)' : 'scaleX(1)'}`,
+                  }"
+                >
+                  <NuxtImg
+                    src="/images/icon-triangle.svg"
+                    width="12"
+                    height="12"
+                  />
+                </div>
               </div>
             </div>
 
@@ -106,8 +184,6 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
-
 const { moodEntries } = defineProps({
   moodEntries: {
     type: Array,
@@ -115,6 +191,7 @@ const { moodEntries } = defineProps({
   },
 });
 
+const selectedBarPopover = ref(null);
 const last11Days = ref([]);
 
 const today = new Date();
@@ -136,6 +213,14 @@ const moodAndSleepTrends = computed(() => {
     2: "/images/icon-very-happy-white.svg",
   };
 
+  const moodToImageColored = {
+    "-2": "/images/icon-very-sad-color.svg",
+    "-1": "/images/icon-sad-color.svg",
+    0: "/images/icon-neutral-color.svg",
+    1: "/images/icon-happy-color.svg",
+    2: "/images/icon-very-happy-color.svg",
+  };
+
   const moodToColor = {
     "-2": "#FF9B99",
     "-1": "#B8B1FF",
@@ -144,12 +229,28 @@ const moodAndSleepTrends = computed(() => {
     2: "#FFC97C",
   };
 
+  const moodToLabel = {
+    "-2": "Very Sad",
+    "-1": "Sad",
+    0: "Neutral",
+    1: "Happy",
+    2: "Very Happy",
+  };
+
   const getHeightFromSleepHours = (sleepHours) => {
     if (sleepHours < 3) return 49;
     if (sleepHours < 5) return 102;
     if (sleepHours < 7) return 156;
     if (sleepHours < 9) return 208;
     return 262;
+  };
+
+  const getSleepLabel = (sleepHours) => {
+    if (sleepHours < 3) return "0–2 Hours";
+    if (sleepHours < 5) return "3–4 Hours";
+    if (sleepHours < 7) return "5–6 Hours";
+    if (sleepHours < 9) return "7–8 Hours";
+    return "9+ Hours";
   };
 
   return last11Days.value.map((dayObj) => {
@@ -166,13 +267,22 @@ const moodAndSleepTrends = computed(() => {
         icon: "/images/icon-neutral-white.svg",
         height: 0,
         color: "#E5E7EB",
+        moodLabel: "No data",
+        sleepLabel: "No data",
+        reflection: "No reflection recorded.",
+        feelings: [],
       };
     }
 
     return {
       icon: moodToImage[matchingEntry.mood],
+      iconColored: moodToImageColored[matchingEntry.mood],
       height: getHeightFromSleepHours(matchingEntry.sleepHours),
       color: moodToColor[matchingEntry.mood],
+      moodLabel: moodToLabel[matchingEntry.mood],
+      sleepLabel: getSleepLabel(matchingEntry.sleepHours),
+      journalEntry: matchingEntry.journalEntry || "No reflection recorded.",
+      feelings: matchingEntry.feelings || [],
     };
   });
 });
@@ -181,14 +291,7 @@ const scrollContainer = ref(null);
 
 onMounted(() => {
   if (scrollContainer.value) {
-    // Scroll instantly to the right to show latest day
     scrollContainer.value.scrollLeft = scrollContainer.value.scrollWidth;
-
-    // If you want smooth scroll, use this instead:
-    // scrollContainer.value.scrollTo({
-    //   left: scrollContainer.value.scrollWidth,
-    //   behavior: "smooth",
-    // });
   }
 });
 </script>
