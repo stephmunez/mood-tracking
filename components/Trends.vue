@@ -79,7 +79,6 @@
           </div>
           <div
             class="absolute bottom-12 left-0 flex min-w-[614px] items-end gap-4"
-            @click.self="selectedBarPopover >= 0 && (selectedBarPopover = null)"
           >
             <div
               v-for="(trend, index) in moodAndSleepTrends"
@@ -89,7 +88,7 @@
                 height: trend.height + 'px',
                 backgroundColor: trend.color,
               }"
-              @click="
+              @click.stop="
                 () => {
                   selectedBarPopover = index;
                 }
@@ -109,6 +108,7 @@
                   top: `${trend.height - 262}px`,
                   right: `${index < 4 ? -184 : 48}px`,
                 }"
+                v-click-outside="() => (selectedBarPopover = null)"
               >
                 <div class="flex w-full flex-col gap-2">
                   <h3
