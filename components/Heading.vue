@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full flex-col items-center gap-12 px-4 pt-8">
-    <nav class="flex w-full items-center justify-between">
+    <nav class="relative flex w-full items-center justify-between">
       <Logo />
       <button class="flex items-center gap-[0.625rem]">
         <NuxtImg
@@ -8,9 +8,43 @@
           width="40"
           height="40"
           class="rounded-full object-cover object-center"
+          @click.stop="showDropdown = !showDropdown"
         />
         <NuxtImg src="/images/icon-dropdown-arrow.svg" width="10" />
       </button>
+      <transition name="fade">
+        <div
+          v-if="showDropdown"
+          v-click-outside="() => (showDropdown = false)"
+          class="absolute left-0 top-14 z-50 flex w-full flex-col gap-3 rounded-lg bg-white px-4 py-3 shadow-[0_5px_8px_rgba(32,33,77,0.16)]"
+        >
+          <div class="flex flex-col gap-[2px]">
+            <span
+              class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-900"
+              >Lisa Maria</span
+            >
+            <span
+              class="text-[0.935rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-300"
+              >lisa@mail.com</span
+            >
+          </div>
+          <div class="pointer-events-none h-px w-full bg-blue-100"></div>
+          <button class="flex items-center gap-[0.625rem]">
+            <NuxtImg src="/images/icon-settings.svg" width="16" height="16" />
+            <span
+              class="text-[0.935rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
+              >Settings</span
+            >
+          </button>
+          <button class="flex items-center gap-[0.625rem]">
+            <NuxtImg src="/images/icon-logout.svg" width="16" height="16" />
+            <span
+              class="text-[0.935rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
+              >Logout</span
+            >
+          </button>
+        </div>
+      </transition>
     </nav>
 
     <div class="flex w-full flex-col items-center gap-4">
@@ -29,7 +63,6 @@
         {{ todayString }}</span
       >
     </div>
-
     <div v-if="todaysMoodEntry" class="flex w-full flex-col items-center gap-5">
       <div
         class="flex w-full flex-col items-center gap-8 rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-8"
@@ -113,6 +146,7 @@
 <script setup>
 const { moodEntries } = useMoodEntriesStore();
 const moodQuote = ref(null);
+const showDropdown = ref(false);
 
 function getOrdinalSuffix(day) {
   if (day > 3 && day < 21) return "th";
@@ -285,3 +319,18 @@ watchEffect(() => {
   }
 });
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+</style>
