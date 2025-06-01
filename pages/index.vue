@@ -1,16 +1,30 @@
 <template>
   <div class="flex min-h-screen w-full flex-col gap-16 pb-20">
-    <Heading @openmodal="handleOpenModal" />
+    <Heading
+      @openlogmoodmodal="handleOpenLogMoodModal"
+      @opensettingsmodal="handleOpenSettingsModal"
+    />
     <Main />
-    <LogMoodModal :visible="showModal" @close="showModal = false" />
+    <LogMoodModal
+      :visible="showLogMoodModal"
+      @close="showLogMoodModal = false"
+    />
+    <SettingsModal
+      :visible="showSettingsModal"
+      @close="showSettingsModal = false"
+    />
   </div>
 </template>
 
 <script setup>
-const showModal = ref(false);
+const showLogMoodModal = ref(false);
+const showSettingsModal = ref(false);
 
-const handleOpenModal = () => {
-  showModal.value = true;
+const handleOpenLogMoodModal = () => {
+  showLogMoodModal.value = true;
+};
+const handleOpenSettingsModal = () => {
+  showSettingsModal.value = true;
 };
 
 useHead({
