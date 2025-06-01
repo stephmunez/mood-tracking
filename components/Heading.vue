@@ -29,7 +29,10 @@
             >
           </div>
           <div class="pointer-events-none h-px w-full bg-blue-100"></div>
-          <button class="flex items-center gap-[0.625rem]">
+          <button
+            class="flex items-center gap-[0.625rem]"
+            @click="$emit('opensettingsmodal')"
+          >
             <NuxtImg src="/images/icon-settings.svg" width="16" height="16" />
             <span
               class="text-[0.935rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
@@ -136,7 +139,7 @@
     <button
       v-else
       class="h-14 w-56 rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
-      @click="$emit('openmodal')"
+      @click="$emit('openlogmoodmodal')"
     >
       Log today's mood
     </button>
