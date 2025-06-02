@@ -2,13 +2,15 @@
   <div class="flex w-full flex-col items-center gap-12 px-4 pt-8">
     <nav class="relative flex w-full items-center justify-between">
       <Logo />
-      <button class="flex items-center gap-[0.625rem]">
+      <button
+        class="flex items-center gap-[0.625rem]"
+        @click.stop="showDropdown = !showDropdown"
+      >
         <NuxtImg
           src="/images/avatar-lisa.jpg"
           width="40"
           height="40"
           class="rounded-full object-cover object-center"
-          @click.stop="showDropdown = !showDropdown"
         />
         <NuxtImg src="/images/icon-dropdown-arrow.svg" width="10" />
       </button>
