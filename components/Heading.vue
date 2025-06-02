@@ -75,9 +75,9 @@
             class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900/70"
             >I’m feeling</span
           >
-          <spa
+          <span
             class="leading-1.2 text-[2.5rem] font-bold tracking-[-0.3px] text-neutral-900"
-            >{{ todaysMoodSummary.title }}</spa
+            >{{ todaysMoodSummary.title }}</span
           >
         </h2>
         <NuxtImg :src="todaysMoodSummary.img" width="200" height="200" />
