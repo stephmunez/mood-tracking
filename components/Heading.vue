@@ -68,78 +68,83 @@
         {{ todayString }}</span
       >
     </div>
-    <div v-if="todaysMoodEntry" class="flex w-full flex-col items-center gap-5">
+    <transition name="fade">
       <div
-        class="flex w-full flex-col items-center gap-8 rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-8"
+        v-if="todaysMoodEntry"
+        class="flex w-full flex-col items-center gap-5"
       >
-        <h2 class="flex flex-col text-center">
-          <span
-            class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900/70"
-            >I’m feeling</span
-          >
-          <span
-            class="leading-1.2 text-[2.5rem] font-bold tracking-[-0.3px] text-neutral-900"
-            >{{ todaysMoodSummary.title }}</span
-          >
-        </h2>
-        <NuxtImg :src="todaysMoodSummary.img" width="200" height="200" />
-        <div class="flex flex-col items-center gap-4">
-          <NuxtImg src="/images/icon-quote.svg" width="24" height="24" />
-          <span
-            class="text-center text-lg font-medium italic leading-[1.3] tracking-normal text-neutral-900"
-            >“{{ moodQuote }}”</span
-          >
-        </div>
-      </div>
-
-      <div
-        class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
-      >
-        <div class="flex items-center gap-3">
-          <IconSleep fill="#57577B" width="22" height="22" />
-          <h2
-            class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
-          >
-            Sleep
-          </h2>
-        </div>
-        <p
-          class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900"
+        <div
+          class="flex w-full flex-col items-center gap-8 rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-8"
         >
-          {{ todaysSleepSummary }}
-        </p>
-      </div>
-
-      <div
-        class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
-      >
-        <div class="flex items-center gap-3">
-          <NuxtImg src="/images/icon-reflection.svg" width="22" height="22" />
-          <h2
-            class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
-          >
-            Reflection of the day
+          <h2 class="flex flex-col text-center">
+            <span
+              class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900/70"
+              >I’m feeling</span
+            >
+            <span
+              class="leading-1.2 text-[2.5rem] font-bold tracking-[-0.3px] text-neutral-900"
+              >{{ todaysMoodSummary.title }}</span
+            >
           </h2>
+          <NuxtImg :src="todaysMoodSummary.img" width="200" height="200" />
+          <div class="flex flex-col items-center gap-4">
+            <NuxtImg src="/images/icon-quote.svg" width="24" height="24" />
+            <span
+              class="text-center text-lg font-medium italic leading-[1.3] tracking-normal text-neutral-900"
+              >“{{ moodQuote }}”</span
+            >
+          </div>
         </div>
-        <p
-          class="min-h-20 text-lg font-medium leading-[1.2] tracking-normal text-neutral-900"
+
+        <div
+          class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
         >
-          {{ todaysMoodEntry.journalEntry }}
-        </p>
-        <div class="flex flex-wrap gap-3">
-          <span
-            v-for="tag in feelingsTags"
-            :key="tag.id"
-            class="font-medium italic leading-[1.3] tracking-normal text-neutral-600"
+          <div class="flex items-center gap-3">
+            <IconSleep fill="#57577B" width="22" height="22" />
+            <h2
+              class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
+            >
+              Sleep
+            </h2>
+          </div>
+          <p
+            class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900"
           >
-            {{ tag }}
-          </span>
+            {{ todaysSleepSummary }}
+          </p>
+        </div>
+
+        <div
+          class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
+        >
+          <div class="flex items-center gap-3">
+            <NuxtImg src="/images/icon-reflection.svg" width="22" height="22" />
+            <h2
+              class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
+            >
+              Reflection of the day
+            </h2>
+          </div>
+          <p
+            class="min-h-20 text-lg font-medium leading-[1.2] tracking-normal text-neutral-900"
+          >
+            {{ todaysMoodEntry.journalEntry }}
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <span
+              v-for="tag in feelingsTags"
+              :key="tag.id"
+              class="font-medium italic leading-[1.3] tracking-normal text-neutral-600"
+            >
+              {{ tag }}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
 
     <button
-      v-else
+      v-if="!todaysMoodEntry"
       class="h-14 w-56 rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
       @click="$emit('openlogmoodmodal')"
     >
@@ -149,7 +154,13 @@
 </template>
 
 <script setup>
-const { moodEntries } = useMoodEntriesStore();
+const { moodEntries } = defineProps({
+  moodEntries: {
+    type: Array,
+    default: () => [],
+  },
+});
+defineEmits(["opensettingsmodal", "openlogmoodmodal"]);
 const moodQuote = ref(null);
 const showDropdown = ref(false);
 
@@ -328,14 +339,20 @@ watchEffect(() => {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+  transform: translateY(10px) scale(0.98);
 }
+
 .fade-enter-to,
 .fade-leave-from {
   opacity: 1;
+  transform: translateY(0) scale(1);
 }
 </style>
