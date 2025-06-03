@@ -3,8 +3,9 @@
     <Heading
       @openlogmoodmodal="handleOpenLogMoodModal"
       @opensettingsmodal="handleOpenSettingsModal"
+      :moodEntries="moodEntriesStore.moodEntries"
     />
-    <Main />
+    <Main :moodEntries="moodEntriesStore.moodEntries" />
     <LogMoodModal
       :visible="showLogMoodModal"
       @close="showLogMoodModal = false"
@@ -17,8 +18,13 @@
 </template>
 
 <script setup>
+const moodEntriesStore = useMoodEntriesStore();
 const showLogMoodModal = ref(false);
 const showSettingsModal = ref(false);
+
+onMounted(async () => {
+  await moodEntriesStore.fetchMoodEntries();
+});
 
 const handleOpenLogMoodModal = () => {
   showLogMoodModal.value = true;
