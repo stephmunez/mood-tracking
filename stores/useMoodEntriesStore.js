@@ -1,4 +1,4 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 
 export const useMoodEntriesStore = defineStore("mood-entries", {
   state: () => {
@@ -124,6 +124,19 @@ export const useMoodEntriesStore = defineStore("mood-entries", {
     };
   },
   actions: {
+    async fetchMoodEntries() {
+      if (this.fetched) return;
+
+      const { $db } = useNuxtApp();
+
+      const snapshot = await getDocs(collection($db, "moodEntries"));
+
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        this.moodEntries.push(data);
+      });
+    },
+
     async addMoodEntry(moodEntry) {
       const { $db } = useNuxtApp();
 
@@ -131,4 +144,5 @@ export const useMoodEntriesStore = defineStore("mood-entries", {
       this.moodEntries.push(moodEntry);
     },
   },
+  persist: true,
 });
