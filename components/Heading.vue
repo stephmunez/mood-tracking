@@ -68,9 +68,12 @@
         {{ todayString }}</span
       >
     </div>
-    <transition name="fade">
+
+    <!-- Main content with improved transitions -->
+    <transition name="slide-fade" mode="out-in">
       <div
-        v-if="todaysMoodEntry"
+        v-if="dataReady && todaysMoodEntry"
+        key="mood-entry"
         class="flex w-full flex-col items-center gap-5"
       >
         <div
@@ -79,77 +82,104 @@
           <h2 class="flex flex-col text-center">
             <span
               class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900/70"
-              >I’m feeling</span
+              >I'm feeling</span
             >
             <span
               class="leading-1.2 text-[2.5rem] font-bold tracking-[-0.3px] text-neutral-900"
               >{{ todaysMoodSummary.title }}</span
             >
           </h2>
-          <NuxtImg :src="todaysMoodSummary.img" width="200" height="200" />
-          <div class="flex flex-col items-center gap-4">
-            <NuxtImg src="/images/icon-quote.svg" width="24" height="24" />
-            <span
-              class="text-center text-lg font-medium italic leading-[1.3] tracking-normal text-neutral-900"
-              >“{{ moodQuote }}”</span
-            >
-          </div>
+
+          <transition name="scale-fade" appear>
+            <NuxtImg
+              v-if="todaysMoodSummary"
+              :src="todaysMoodSummary.img"
+              width="200"
+              height="200"
+            />
+          </transition>
+
+          <transition name="fade" appear>
+            <div v-if="moodQuote" class="flex flex-col items-center gap-4">
+              <NuxtImg src="/images/icon-quote.svg" width="24" height="24" />
+              <span
+                class="text-center text-lg font-medium italic leading-[1.3] tracking-normal text-neutral-900"
+                >"{{ moodQuote }}"</span
+              >
+            </div>
+          </transition>
         </div>
 
-        <div
-          class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
-        >
-          <div class="flex items-center gap-3">
-            <IconSleep fill="#57577B" width="22" height="22" />
-            <h2
-              class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
-            >
-              Sleep
-            </h2>
-          </div>
-          <p
-            class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900"
+        <transition name="slide-up" appear>
+          <div
+            class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
           >
-            {{ todaysSleepSummary }}
-          </p>
-        </div>
+            <div class="flex items-center gap-3">
+              <IconSleep fill="#57577B" width="22" height="22" />
+              <h2
+                class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
+              >
+                Sleep
+              </h2>
+            </div>
+            <p
+              class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900"
+            >
+              {{ todaysSleepSummary }}
+            </p>
+          </div>
+        </transition>
 
-        <div
-          class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
-        >
-          <div class="flex items-center gap-3">
-            <NuxtImg src="/images/icon-reflection.svg" width="22" height="22" />
-            <h2
-              class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
-            >
-              Reflection of the day
-            </h2>
-          </div>
-          <p
-            class="min-h-20 text-lg font-medium leading-[1.2] tracking-normal text-neutral-900"
+        <transition name="slide-up" appear>
+          <div
+            class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
           >
-            {{ todaysMoodEntry.journalEntry }}
-          </p>
-          <div class="flex flex-wrap gap-3">
-            <span
-              v-for="tag in feelingsTags"
-              :key="tag.id"
-              class="font-medium italic leading-[1.3] tracking-normal text-neutral-600"
+            <div class="flex items-center gap-3">
+              <NuxtImg
+                src="/images/icon-reflection.svg"
+                width="22"
+                height="22"
+              />
+              <h2
+                class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
+              >
+                Reflection of the day
+              </h2>
+            </div>
+            <p
+              class="min-h-20 text-lg font-medium leading-[1.2] tracking-normal text-neutral-900"
             >
-              {{ tag }}
-            </span>
+              {{ todaysMoodEntry.journalEntry }}
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <transition-group name="tag-fade" appear>
+                <span
+                  v-for="(tag, index) in feelingsTags"
+                  :key="tag"
+                  :style="{ transitionDelay: `${index * 50}ms` }"
+                  class="font-medium italic leading-[1.3] tracking-normal text-neutral-600"
+                >
+                  {{ tag }}
+                </span>
+              </transition-group>
+            </div>
           </div>
-        </div>
+        </transition>
+      </div>
+
+      <div
+        v-else-if="dataReady && !todaysMoodEntry"
+        key="log-button"
+        class="flex w-full flex-col items-center"
+      >
+        <button
+          class="h-14 w-56 transform rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0 transition-all duration-200 hover:scale-105 hover:bg-blue-700 active:scale-95"
+          @click="$emit('openlogmoodmodal')"
+        >
+          Log today's mood
+        </button>
       </div>
     </transition>
-
-    <button
-      v-if="!todaysMoodEntry"
-      class="h-14 w-56 rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
-      @click="$emit('openlogmoodmodal')"
-    >
-      Log today's mood
-    </button>
   </div>
 </template>
 
@@ -161,8 +191,18 @@ const { moodEntries } = defineProps({
   },
 });
 defineEmits(["opensettingsmodal", "openlogmoodmodal"]);
+
 const moodQuote = ref(null);
 const showDropdown = ref(false);
+const dataReady = ref(false);
+
+onMounted(() => {
+  nextTick(() => {
+    setTimeout(() => {
+      dataReady.value = true;
+    }, 1000);
+  });
+});
 
 function getOrdinalSuffix(day) {
   if (day > 3 && day < 21) return "th";
@@ -337,6 +377,7 @@ watchEffect(() => {
 </script>
 
 <style scoped>
+/* Original fade transition */
 .fade-enter-active,
 .fade-leave-active {
   transition:
@@ -354,5 +395,69 @@ watchEffect(() => {
 .fade-leave-from {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+/* Slide fade transition for main content */
+.slide-fade-enter-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.55, 0.06, 0.68, 0.19);
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px) scale(1.02);
+}
+
+/* Scale fade for mood image */
+.scale-fade-enter-active {
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scale-fade-enter-from {
+  opacity: 0;
+  transform: scale(0.8) rotate(-5deg);
+}
+
+/* Slide up for cards */
+.slide-up-enter-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* Tag stagger animation */
+.tag-fade-enter-active {
+  transition: all 0.3s ease;
+}
+
+.tag-fade-enter-from {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+/* Pulse animation for loading */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 </style>
