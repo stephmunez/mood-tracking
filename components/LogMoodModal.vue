@@ -231,6 +231,7 @@ const props = defineProps({
   visible: Boolean,
 });
 const emit = defineEmits(["close"]);
+const moodEntriesStore = useMoodEntriesStore();
 
 const selectedMood = ref(null);
 const selectedFeelings = ref([]);
@@ -308,7 +309,7 @@ const emitClose = () => {
   currentStep.value = 1;
 };
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   const moodEntry = {
     createdAt: new Date().toISOString(),
     mood: selectedMood.value,
@@ -317,8 +318,9 @@ const handleSubmit = () => {
     sleepHours: selectedHour.value,
   };
 
+  await moodEntriesStore.addMoodEntry(moodEntry);
+
   emitClose();
-  console.log(moodEntry);
 };
 </script>
 
