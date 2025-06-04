@@ -101,78 +101,84 @@
                 <NuxtImg :src="trend.icon" width="30" height="30" />
               </div>
 
-              <div
-                v-if="selectedBarPopover === index"
-                class="absolute z-50 flex w-44 flex-col gap-3 rounded-[10px] border border-solid border-blue-100 bg-white p-3 shadow-[0_4px_7px_rgba(32,33,77,0.16)]"
-                :style="{
-                  top: `${trend.height - 262}px`,
-                  right: `${index < 4 ? -184 : 48}px`,
-                }"
-                v-click-outside="() => (selectedBarPopover = null)"
-              >
-                <div class="flex w-full flex-col gap-2">
-                  <h3
-                    class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
-                  >
-                    Mood
-                  </h3>
-                  <div class="flex items-center gap-[0.375rem]">
-                    <NuxtImg :src="trend.iconColored" width="16" height="16" />
+              <transition name="fade">
+                <div
+                  v-if="selectedBarPopover === index"
+                  class="absolute z-50 flex w-44 flex-col gap-3 rounded-[10px] border border-solid border-blue-100 bg-white p-3 shadow-[0_4px_7px_rgba(32,33,77,0.16)]"
+                  :style="{
+                    top: `${trend.height - 262}px`,
+                    right: `${index < 4 ? -184 : 48}px`,
+                  }"
+                  v-click-outside="() => (selectedBarPopover = null)"
+                >
+                  <div class="flex w-full flex-col gap-2">
+                    <h3
+                      class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                    >
+                      Mood
+                    </h3>
+                    <div class="flex items-center gap-[0.375rem]">
+                      <NuxtImg
+                        :src="trend.iconColored"
+                        width="16"
+                        height="16"
+                      />
+                      <span
+                        class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                        >{{ trend.moodLabel }}</span
+                      >
+                    </div>
+                  </div>
+                  <div class="flex w-full flex-col gap-2">
+                    <h3
+                      class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                    >
+                      Sleep
+                    </h3>
                     <span
                       class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
-                      >{{ trend.moodLabel }}</span
+                      >{{ trend.sleepLabel }}</span
                     >
                   </div>
-                </div>
-                <div class="flex w-full flex-col gap-2">
-                  <h3
-                    class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
-                  >
-                    Sleep
-                  </h3>
-                  <span
-                    class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
-                    >{{ trend.sleepLabel }}</span
-                  >
-                </div>
-                <div class="flex w-full flex-col gap-2">
-                  <h3
-                    class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
-                  >
-                    Reflection
-                  </h3>
-                  <span
-                    class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
-                    >{{ trend.journalEntry }}</span
-                  >
-                </div>
-                <div class="flex w-full flex-col gap-2">
-                  <h3
-                    class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
-                  >
-                    Tags
-                  </h3>
-                  <span
-                    class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
-                    >{{ trend.feelings.join(", ") }}</span
-                  >
-                </div>
+                  <div class="flex w-full flex-col gap-2">
+                    <h3
+                      class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                    >
+                      Reflection
+                    </h3>
+                    <span
+                      class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                      >{{ trend.journalEntry }}</span
+                    >
+                  </div>
+                  <div class="flex w-full flex-col gap-2">
+                    <h3
+                      class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                    >
+                      Tags
+                    </h3>
+                    <span
+                      class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                      >{{ trend.feelings.join(", ") }}</span
+                    >
+                  </div>
 
-                <div
-                  class="absolute z-50 h-3 w-3"
-                  :style="{
-                    bottom: `${trend.height - 40}px`,
-                    right: `${index < 4 ? 171 : -8}px`,
-                    transform: `${index < 4 ? 'scaleX(-1)' : 'scaleX(1)'}`,
-                  }"
-                >
-                  <NuxtImg
-                    src="/images/icon-triangle.svg"
-                    width="12"
-                    height="12"
-                  />
+                  <div
+                    class="absolute z-50 h-3 w-3"
+                    :style="{
+                      bottom: `${trend.height - 40}px`,
+                      right: `${index < 4 ? 171 : -8}px`,
+                      transform: `${index < 4 ? 'scaleX(-1)' : 'scaleX(1)'}`,
+                    }"
+                  >
+                    <NuxtImg
+                      src="/images/icon-triangle.svg"
+                      width="12"
+                      height="12"
+                    />
+                  </div>
                 </div>
-              </div>
+              </transition>
             </div>
 
             <!-- 49,  102, 156, 208, 262-->
@@ -295,3 +301,14 @@ onMounted(() => {
   }
 });
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
