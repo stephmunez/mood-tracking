@@ -1,5 +1,5 @@
 <template>
-  <form action="#" class="flex w-full flex-col gap-8">
+  <form @submit="handleSignup" class="flex w-full flex-col gap-8">
     <div class="flex w-full flex-col gap-5">
       <div class="flex w-full flex-col gap-2">
         <label
@@ -8,10 +8,11 @@
           >Email address</label
         >
         <input
+          v-model="email"
           type="email"
-          id="email"
-          class="rounded-[10px] border border-solid border-neutral-300 px-4 py-3 text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600 placeholder:text-neutral-300"
           placeholder="name@email.com"
+          class="rounded-[10px] border border-solid border-neutral-300 px-4 py-3 text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600 placeholder:text-neutral-300"
+          required
         />
       </div>
       <div class="flex w-full flex-col gap-2">
@@ -21,19 +22,31 @@
           >Password</label
         >
         <input
+          v-model="password"
           type="password"
-          id="password"
+          placeholder="Password"
           class="rounded-[10px] border border-solid border-neutral-300 px-4 py-3 text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600 placeholder:text-neutral-300"
+          required
         />
       </div>
     </div>
     <div class="flex w-full flex-col items-center gap-5">
-      <button
-        type="submit"
-        class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
-      >
-        Sign Up
-      </button>
+      <div class="flex w-full flex-col gap-2">
+        <button
+          type="submit"
+          class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
+        >
+          Sign Up
+        </button>
+        <p
+          v-if="authStore.signupError"
+          class="flex items-center gap-1 text-xs font-normal leading-[1.1] tracking-normal text-red-700"
+        >
+          <NuxtImg src="/images/icon-info-circle.svg" width="12" height="12" />
+          <span>{{ authStore.signupError }}</span>
+        </p>
+      </div>
+
       <p class="text-lg leading-[1.4] tracking-[-0.3px] text-neutral-600">
         Already got an account?
         <NuxtLink to="/log-in" class="text-blue-600">Log in.</NuxtLink>
@@ -41,3 +54,15 @@
     </div>
   </form>
 </template>
+
+<script setup>
+const email = ref("");
+const password = ref("");
+const authStore = useAuthStore();
+
+const handleSignup = async (e) => {
+  e.preventDefault();
+
+  await authStore.signup(email.value, password.value);
+};
+</script>
