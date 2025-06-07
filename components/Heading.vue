@@ -41,7 +41,10 @@
               >Settings</span
             >
           </button>
-          <button class="flex items-center gap-[0.625rem]">
+          <button
+            class="flex items-center gap-[0.625rem]"
+            @click="handleLogout"
+          >
             <NuxtImg src="/images/icon-logout.svg" width="16" height="16" />
             <span
               class="text-[0.935rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
@@ -192,9 +195,10 @@ const { moodEntries } = defineProps({
 });
 defineEmits(["opensettingsmodal", "openlogmoodmodal"]);
 
-const moodQuote = ref(null);
+const authStore = useAuthStore();
 const showDropdown = ref(false);
 const dataReady = ref(false);
+const moodQuote = ref(null);
 
 onMounted(() => {
   nextTick(() => {
@@ -203,6 +207,10 @@ onMounted(() => {
     }, 1000);
   });
 });
+
+const handleLogout = async () => {
+  await authStore.logout();
+};
 
 function getOrdinalSuffix(day) {
   if (day > 3 && day < 21) return "th";
@@ -247,10 +255,9 @@ function formatDateWithOrdinal(date) {
   const day = date.getDate();
   const year = date.getFullYear();
   const suffix = getOrdinalSuffix(day);
+
   return `${dayOfWeek}, ${month} ${day}${suffix}, ${year}`;
 }
-
-const todayString = formatDateWithOrdinal(new Date());
 
 const isToday = (dateString) => {
   const today = new Date();
@@ -262,8 +269,43 @@ const isToday = (dateString) => {
   );
 };
 
-const todaysMoodEntry = computed(() => {
-  return moodEntries.find((entry) => isToday(entry.createdAt));
+const todayString = formatDateWithOrdinal(new Date());
+
+const todaysMoodEntry = computed(() =>
+  moodEntries.find((entry) => isToday(entry.createdAt)),
+);
+
+const todaysMoodSummary = computed(() => {
+  if (!todaysMoodEntry.value) return null;
+
+  const mood = todaysMoodEntry.value.mood;
+  if (mood < -1) {
+    return { img: "/images/icon-very-sad-color.svg", title: "Very Sad" };
+  } else if (mood < 0) {
+    return { img: "/images/icon-sad-color.svg", title: "Sad" };
+  } else if (mood === 0) {
+    return { img: "/images/icon-neutral-color.svg", title: "Neutral" };
+  } else if (mood <= 1) {
+    return { img: "/images/icon-happy-color.svg", title: "Happy" };
+  } else {
+    return { img: "/images/icon-very-happy-color.svg", title: "Very Happy" };
+  }
+});
+
+const todaysSleepSummary = computed(() => {
+  if (!todaysMoodEntry.value) return null;
+
+  const sleepHours = todaysMoodEntry.value.sleepHours;
+  if (sleepHours < 3) return "0–2 Hours";
+  if (sleepHours < 5) return "3–4 Hours";
+  if (sleepHours < 7) return "5–6 Hours";
+  if (sleepHours < 9) return "7–8 Hours";
+  return "9+ Hours";
+});
+
+const feelingsTags = computed(() => {
+  if (!todaysMoodEntry.value) return null;
+  return todaysMoodEntry.value.feelings.map((tag) => `#${tag}`);
 });
 
 const moodQuotes = {
@@ -303,65 +345,6 @@ const moodQuotes = {
     "Let your happiness ripple out and inspire others.",
   ],
 };
-
-const todaysMoodSummary = computed(() => {
-  if (!todaysMoodEntry.value) return null;
-
-  const mood = todaysMoodEntry.value.mood;
-
-  if (mood < -1) {
-    return {
-      img: "/images/icon-very-sad-color.svg",
-      title: "Very Sad",
-    };
-  } else if (mood < 0) {
-    return {
-      img: "/images/icon-sad-color.svg",
-      title: "Sad",
-    };
-  } else if (mood === 0) {
-    return {
-      img: "/images/icon-neutral-color.svg",
-      title: "Neutral",
-    };
-  } else if (mood <= 1) {
-    return {
-      img: "/images/icon-happy-color.svg",
-      title: "Happy",
-    };
-  } else {
-    return {
-      img: "/images/icon-very-happy-color.svg",
-      title: "Very Happy",
-    };
-  }
-});
-
-const todaysSleepSummary = computed(() => {
-  if (!todaysMoodEntry.value) return null;
-
-  const sleepHours = todaysMoodEntry.value.sleepHours;
-
-  if (sleepHours < 3) {
-    return "0–2 Hours";
-  } else if (sleepHours < 5) {
-    return "3–4 Hours";
-  } else if (sleepHours < 7) {
-    return "5–6 Hours";
-  } else if (sleepHours < 9) {
-    return "7–8 Hours";
-  } else {
-    return "9+ Hours";
-  }
-});
-
-const feelingsTags = computed(() => {
-  if (!todaysMoodEntry.value) return null;
-
-  const tags = todaysMoodEntry.value.feelings.map((tag) => `#${tag}`);
-
-  return tags;
-});
 
 watchEffect(() => {
   if (!todaysMoodEntry.value) return;
