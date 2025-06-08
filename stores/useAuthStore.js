@@ -1,4 +1,8 @@
-import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -31,6 +35,18 @@ export const useAuthStore = defineStore("auth", {
       await signOut($auth);
       this.user = null;
     },
-    // login
+
+    async login(email, password) {
+      const { $auth } = useNuxtApp();
+
+      this.loginError = null;
+
+      try {
+        const cred = await signInWithEmailAndPassword($auth, email, password);
+        this.user = cred.user;
+      } catch (error) {
+        this.loginError = error.message;
+      }
+    },
   },
 });
