@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
@@ -12,6 +13,19 @@ export const useAuthStore = defineStore("auth", {
   }),
 
   actions: {
+    setupAuthListener() {
+      const { $auth } = useNuxtApp();
+
+      if ($auth) {
+        onAuthStateChanged($auth, (user) => {
+          this.user = user || null;
+          console.log("user state change:", this.user);
+        });
+      } else {
+        console.error("Firebase Auth is not initialized");
+      }
+    },
+
     async signup(email, password) {
       const { $auth } = useNuxtApp();
 
