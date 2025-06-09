@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
   modules: ["@nuxt/image", "@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  plugins: ["@/plugins/firebase.client.js", "@/plugins/authSetup.client.js"],
   app: {
     head: {
       meta: [
