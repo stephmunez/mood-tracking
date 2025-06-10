@@ -27,4 +27,8 @@
 useHead({
   title: "Mood Tracking | Sign Up",
 });
+
+definePageMeta({
+  middleware: ["guest"],
+});
 </script>
