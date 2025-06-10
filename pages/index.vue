@@ -36,4 +36,8 @@ const handleOpenSettingsModal = () => {
 useHead({
   title: "Mood Tracking | Home",
 });
+
+definePageMeta({
+  middleware: ["auth"],
+});
 </script>
