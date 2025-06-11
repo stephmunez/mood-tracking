@@ -41,24 +41,6 @@ const emit = defineEmits(["close"]);
 
 const emitClose = () => {
   emit("close");
-  selectedMood.value = null;
-  selectedFeelings.value = [];
-  journalEntry.value = "";
-  selectedHour.value = "";
-  currentStep.value = 1;
-};
-
-const handleSubmit = () => {
-  const moodEntry = {
-    createdAt: new Date().toISOString(),
-    mood: selectedMood.value,
-    feelings: [...selectedFeelings.value],
-    journalEntry: journalEntry.value,
-    sleepHours: selectedHour.value,
-  };
-
-  emitClose();
-  console.log(moodEntry);
 };
 </script>
 
