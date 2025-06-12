@@ -138,10 +138,17 @@ export const useMoodEntriesStore = defineStore("mood-entries", {
     },
 
     async addMoodEntry(moodEntry) {
-      const { $db } = useNuxtApp();
+      const { $db, $auth } = useNuxtApp();
 
-      await addDoc(collection($db, "moodEntries"), moodEntry);
-      this.moodEntries.push(moodEntry);
+      await addDoc(collection($db, "moodEntries"), {
+        ...moodEntry,
+        userId: $auth.currentUser.uid,
+      });
+
+      this.moodEntries.push({
+        ...moodEntry,
+        userId: $auth.currentUser.uid,
+      });
     },
   },
   persist: true,
