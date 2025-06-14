@@ -4,13 +4,15 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 export default defineNuxtPlugin(() => {
+  const config = useRuntimeConfig();
+
   const firebaseConfig = {
-    apiKey: "AIzaSyA38AGtzjbqRDnrtXIZ1KJ7yzJPtKYX7hs",
-    authDomain: "mood-tracking-f73b3.firebaseapp.com",
-    projectId: "mood-tracking-f73b3",
-    storageBucket: "mood-tracking-f73b3.firebasestorage.app",
-    messagingSenderId: "1084589204114",
-    appId: "1:1084589204114:web:a6bf0d255e7ae6745f7c4b",
+    apiKey: config.public.firebaseApiKey,
+    authDomain: config.public.firebaseAuthDomain,
+    projectId: config.public.firebaseProjectId,
+    storageBucket: config.public.firebaseStorageBucket,
+    messagingSenderId: config.public.firebaseMessagingSenderId,
+    appId: config.public.firebaseAppId,
   };
 
   const app = initializeApp(firebaseConfig);
