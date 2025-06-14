@@ -1,5 +1,5 @@
 <template>
-  <form action="#" class="flex w-full flex-col gap-8">
+  <form @submit.prevent="handleSubmit" class="flex w-full flex-col gap-8">
     <div class="flex w-full flex-col gap-6">
       <div class="flex w-full flex-col gap-2">
         <label
@@ -10,6 +10,7 @@
         <input
           type="text"
           id="name"
+          v-model="name"
           class="rounded-[10px] border border-solid border-neutral-300 px-4 py-3 text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600 placeholder:text-neutral-300"
           placeholder="Your Name"
         />
@@ -17,8 +18,8 @@
 
       <div class="flex w-full items-start gap-5">
         <img
-          v-if="preview"
-          :src="preview"
+          v-if="profilePicturePreview"
+          :src="profilePicturePreview"
           alt="Profile preview"
           class="rounded-full object-cover"
           width="64"
@@ -68,21 +69,50 @@
     >
       Start Tracking
     </button>
+
+    <p v-if="authStore.signupError" class="text-sm text-red-500">
+      {{ authStore.signupError }}
+    </p>
   </form>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useAuthStore } from "../stores/useAuthStore";
 
-const preview = ref(null);
+const authStore = useAuthStore();
+const router = useRouter();
+
+const name = ref("");
+const profilePicture = ref(null);
+const profilePicturePreview = ref(null);
 
 const handleFileChange = (e) => {
   const file = e.target.files[0];
   if (file && file.size < 250 * 1024) {
-    preview.value = URL.createObjectURL(file);
+    profilePicture.value = file;
+    profilePicturePreview.value = URL.createObjectURL(file);
   } else {
-    alert("File is too large. Max size is 250KB.");
+    profilePicture.value = null;
+    profilePicturePreview.value = null;
     e.target.value = null;
+  }
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  console.log(name.value, profilePicture.value);
+
+  if (!name.value || !profilePicture.value) {
+    authStore.signupError =
+      "Please enter your name and upload a profile picture.";
+    return;
+  }
+
+  await authStore.updateUserProfile(name.value, profilePicture.value);
+
+  if (!authStore.signupError) {
+    router.push("/");
   }
 };
 </script>

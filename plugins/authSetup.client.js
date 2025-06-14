@@ -1,6 +1,6 @@
 import { useAuthStore } from "../stores/useAuthStore";
 
-const PROTECTED_ROUTES = ["/"];
+const PROTECTED_ROUTES = ["/", "/onboarding"];
 const GUEST_ONLY_ROUTES = ["/log-in", "/sign-up"];
 
 export default defineNuxtPlugin(() => {
