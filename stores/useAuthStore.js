@@ -3,7 +3,9 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -30,7 +32,6 @@ export const useAuthStore = defineStore("auth", {
 
     async signup(email, password) {
       const { $auth } = useNuxtApp();
-
       this.signupError = null;
 
       try {
@@ -40,6 +41,51 @@ export const useAuthStore = defineStore("auth", {
           password,
         );
         this.user = cred.user;
+
+        const router = useRouter();
+        router.push("/onboarding");
+      } catch (error) {
+        this.signupError = error.message;
+      }
+    },
+
+    async updateUserProfile(name, profilePictureFile) {
+      const { $auth, $storage } = useNuxtApp();
+      this.signupError = null;
+
+      const validTypes = ["image/jpeg", "image/png"];
+      const maxSize = 250 * 1024;
+
+      if (!validTypes.includes(profilePictureFile.type)) {
+        this.signupError = "Only JPEG or PNG images are allowed.";
+        return;
+      }
+
+      if (profilePictureFile.size > maxSize) {
+        this.signupError = "Profile picture must be under 250KB.";
+        return;
+      }
+
+      try {
+        const user = $auth.currentUser;
+        const storageRef = ref($storage, `profilePictures/${user.uid}`);
+        await uploadBytes(storageRef, profilePictureFile, {
+          customMetadata: {
+            userId: user.uid,
+          },
+        });
+        const photoURL = await getDownloadURL(storageRef);
+
+        await updateProfile(user, {
+          displayName: name,
+          photoURL,
+        });
+
+        this.user = user;
+
+        // Redirect to dashboard or homepage
+        const router = useRouter();
+        router.push("/");
       } catch (error) {
         this.signupError = error.message;
       }
