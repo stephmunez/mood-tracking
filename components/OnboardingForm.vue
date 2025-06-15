@@ -101,11 +101,8 @@ const handleFileChange = (e) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  console.log(name.value, profilePicture.value);
-
-  if (!name.value || !profilePicture.value) {
-    authStore.settingsError =
-      "Please enter your name and upload a profile picture.";
+  if (!name.value) {
+    authStore.settingsError = "Please enter your name.";
     return;
   }
 
