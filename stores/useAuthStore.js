@@ -22,7 +22,15 @@ export const useAuthStore = defineStore("auth", {
 
       if ($auth) {
         onAuthStateChanged($auth, (user) => {
-          this.user = user || null;
+          this.user = user
+            ? {
+                uid: user.uid,
+                displayName: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+              }
+            : null;
+
           console.log("user state change:", this.user);
           this.authReady = true;
         });
@@ -41,7 +49,12 @@ export const useAuthStore = defineStore("auth", {
           email,
           password,
         );
-        this.user = cred.user;
+        this.user = {
+          uid: cred.user.uid,
+          displayName: cred.user.displayName,
+          email: cred.user.email,
+          photoURL: cred.user.photoURL,
+        };
 
         const router = useRouter();
         router.push("/onboarding");
@@ -54,41 +67,67 @@ export const useAuthStore = defineStore("auth", {
       const { $auth, $storage } = useNuxtApp();
       this.settingsError = null;
 
-      const validTypes = ["image/jpeg", "image/png"];
-      const maxSize = 250 * 1024;
+      const user = $auth.currentUser;
+      let photoURL = user.photoURL;
 
-      if (!validTypes.includes(profilePictureFile.type)) {
-        this.settingsError = "Only JPEG or PNG images are allowed.";
-        return;
-      }
+      if (profilePictureFile) {
+        const validTypes = ["image/jpeg", "image/png"];
+        const maxSize = 250 * 1024;
 
-      if (profilePictureFile.size > maxSize) {
-        this.settingsError = "Profile picture must be under 250KB.";
-        return;
+        if (!validTypes.includes(profilePictureFile.type)) {
+          this.settingsError = "Only JPEG or PNG images are allowed.";
+          return;
+        }
+
+        if (profilePictureFile.size > maxSize) {
+          this.settingsError = "Profile picture must be under 250KB.";
+          return;
+        }
+
+        try {
+          const storageRef = ref($storage, `profilePictures/${user.uid}`);
+          await uploadBytes(storageRef, profilePictureFile, {
+            customMetadata: {
+              userId: user.uid,
+            },
+          });
+          photoURL = await getDownloadURL(storageRef);
+        } catch (error) {
+          this.settingsError = "Failed to upload profile picture.";
+          return;
+        }
       }
 
       try {
-        const user = $auth.currentUser;
-        const storageRef = ref($storage, `profilePictures/${user.uid}`);
-        await uploadBytes(storageRef, profilePictureFile, {
-          customMetadata: {
-            userId: user.uid,
-          },
-        });
-        const photoURL = await getDownloadURL(storageRef);
-
         await updateProfile(user, {
           displayName: name,
           photoURL,
         });
 
-        this.user = user;
-
-        // Redirect to dashboard or homepage
-        const router = useRouter();
-        router.push("/");
+        this.user = {
+          ...this.user,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+        };
       } catch (error) {
         this.settingsError = error.message;
+      }
+    },
+    async login(email, password) {
+      const { $auth } = useNuxtApp();
+
+      this.loginError = null;
+
+      try {
+        const cred = await signInWithEmailAndPassword($auth, email, password);
+        this.user = {
+          uid: cred.user.uid,
+          displayName: cred.user.displayName,
+          email: cred.user.email,
+          photoURL: cred.user.photoURL,
+        };
+      } catch (error) {
+        this.loginError = error.message;
       }
     },
 
@@ -97,19 +136,6 @@ export const useAuthStore = defineStore("auth", {
 
       await signOut($auth);
       this.user = null;
-    },
-
-    async login(email, password) {
-      const { $auth } = useNuxtApp();
-
-      this.loginError = null;
-
-      try {
-        const cred = await signInWithEmailAndPassword($auth, email, password);
-        this.user = cred.user;
-      } catch (error) {
-        this.loginError = error.message;
-      }
     },
   },
 });
