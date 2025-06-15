@@ -17,14 +17,17 @@
       </div>
 
       <div class="flex w-full items-start gap-5">
-        <NuxtImg
+        <div
           v-if="profilePicturePreview"
-          :src="profilePicturePreview"
-          alt="Profile preview"
-          class="rounded-full object-cover"
-          width="64"
-          height="64"
-        />
+          class="flex h-16 min-w-16 items-center justify-center overflow-hidden rounded-full"
+        >
+          <NuxtImg
+            :src="profilePicturePreview"
+            width="64"
+            height="64"
+            :placeholder="[50, 25, 75, 5]"
+          />
+        </div>
         <NuxtImg
           v-else
           src="/images/avatar-placeholder.svg"
@@ -70,8 +73,12 @@
       Save Changes
     </button>
 
-    <p v-if="authStore.settingsError" class="text-sm text-red-500">
-      {{ authStore.settingsError }}
+    <p
+      v-if="authStore.settingsError"
+      class="flex items-center gap-1 text-xs font-normal leading-[1.1] tracking-normal text-red-700"
+    >
+      <NuxtImg src="/images/icon-info-circle.svg" width="12" height="12" />
+      <span>{{ authStore.settingsError }}</span>
     </p>
   </form>
 </template>
@@ -92,28 +99,19 @@ onMounted(() => {
   if (authStore.user) {
     name.value = authStore.user.displayName || "";
     profilePicturePreview.value = authStore.user.photoURL || null;
+    authStore.settingsError = "";
   }
 });
 
 const handleFileChange = (e) => {
   const file = e.target.files[0];
-  if (file && file.size < 250 * 1024) {
-    profilePicture.value = file;
-    profilePicturePreview.value = URL.createObjectURL(file);
-  } else {
-    profilePicture.value = null;
-    profilePicturePreview.value = null;
-    e.target.value = null;
-  }
+
+  profilePicture.value = file;
+  profilePicturePreview.value = URL.createObjectURL(file);
 };
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-
-  if (!name.value) {
-    authStore.settingsError = "Please enter your name.";
-    return;
-  }
 
   await authStore.updateUserProfile(name.value, profilePicture.value);
 
