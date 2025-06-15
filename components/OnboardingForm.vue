@@ -17,14 +17,17 @@
       </div>
 
       <div class="flex w-full items-start gap-5">
-        <img
+        <div
           v-if="profilePicturePreview"
-          :src="profilePicturePreview"
-          alt="Profile preview"
-          class="rounded-full object-cover"
-          width="64"
-          height="64"
-        />
+          class="flex h-16 min-w-16 items-center justify-center overflow-hidden rounded-full"
+        >
+          <NuxtImg
+            :src="profilePicturePreview"
+            width="64"
+            height="64"
+            :placeholder="[50, 25, 75, 5]"
+          />
+        </div>
         <NuxtImg
           v-else
           src="/images/avatar-placeholder.svg"
@@ -63,53 +66,62 @@
       </div>
     </div>
 
-    <button
-      type="submit"
-      class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
-    >
-      Start Tracking
-    </button>
-
-    <p v-if="authStore.settingsError" class="text-sm text-red-500">
-      {{ authStore.settingsError }}
-    </p>
+    <div class="flex w-full flex-col gap-4">
+      <p
+        v-if="authStore.settingsError"
+        class="flex items-center gap-1 text-xs font-normal leading-[1.1] tracking-normal text-red-700"
+      >
+        <NuxtImg src="/images/icon-info-circle.svg" width="12" height="12" />
+        <span>{{ authStore.settingsError }}</span>
+      </p>
+      <button
+        type="submit"
+        class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
+      >
+        Start Tracking
+      </button>
+    </div>
   </form>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { useAuthStore } from "../stores/useAuthStore";
 
 const authStore = useAuthStore();
 const router = useRouter();
+const emit = defineEmits(["close"]);
 
 const name = ref("");
 const profilePicture = ref(null);
 const profilePicturePreview = ref(null);
 
+watch(
+  () => authStore.user,
+  (user) => {
+    if (user) {
+      name.value = user.displayName || "";
+      profilePicturePreview.value = user.photoURL || null;
+    }
+  },
+  { immediate: true },
+);
+
 const handleFileChange = (e) => {
   const file = e.target.files[0];
-  if (file && file.size < 250 * 1024) {
-    profilePicture.value = file;
-    profilePicturePreview.value = URL.createObjectURL(file);
-  } else {
-    profilePicture.value = null;
-    profilePicturePreview.value = null;
-    e.target.value = null;
-  }
+
+  profilePicture.value = file;
+  profilePicturePreview.value = URL.createObjectURL(file);
 };
 
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  if (!name.value) {
-    authStore.settingsError = "Please enter your name.";
-    return;
-  }
-
   await authStore.updateUserProfile(name.value, profilePicture.value);
 
   if (!authStore.settingsError) {
     router.push("/");
+    emit("close");
   }
 };
 </script>

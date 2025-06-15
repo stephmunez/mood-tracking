@@ -70,6 +70,11 @@ export const useAuthStore = defineStore("auth", {
       const user = $auth.currentUser;
       let photoURL = user.photoURL;
 
+      if (name === "") {
+        this.settingsError = "Please enter your name.";
+        return;
+      }
+
       if (profilePictureFile) {
         const validTypes = ["image/jpeg", "image/png"];
         const maxSize = 250 * 1024;
@@ -113,6 +118,7 @@ export const useAuthStore = defineStore("auth", {
         this.settingsError = error.message;
       }
     },
+
     async login(email, password) {
       const { $auth } = useNuxtApp();
 
