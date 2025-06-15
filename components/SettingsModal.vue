@@ -20,7 +20,7 @@
             Personalize your account with your name and photo.
           </p>
         </div>
-        <UpdateProfileForm />
+        <UpdateProfileForm @close="emitClose" />
 
         <button
           class="absolute right-4 top-4 flex h-6 w-6 items-center justify-center"

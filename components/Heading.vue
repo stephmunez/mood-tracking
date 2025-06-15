@@ -7,11 +7,11 @@
         @click.stop="showDropdown = !showDropdown"
       >
         <div
-          v-if="authStore.user.photoURL"
+          v-if="authStore.user?.photoURL"
           class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full"
         >
           <NuxtImg
-            :src="authStore.user.photoURL"
+            :src="authStore.user?.photoURL"
             width="40"
             height="40"
             :placeholder="[50, 25, 75, 5]"
@@ -36,11 +36,11 @@
           <div class="flex flex-col gap-[2px]">
             <span
               class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-900"
-              >{{ authStore.user.displayName }}</span
+              >{{ authStore.user?.displayName }}</span
             >
             <span
               class="text-[0.935rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-300"
-              >{{ authStore.user.email }}</span
+              >{{ authStore.user?.email }}</span
             >
           </div>
           <div class="pointer-events-none h-px w-full bg-blue-100"></div>
@@ -71,7 +71,7 @@
     <div class="flex w-full flex-col items-center gap-4">
       <span
         class="text-center text-2xl font-bold leading-[1.3] tracking-[-0.3px] text-blue-600"
-        >Hello, {{ authStore.user.displayName.split(" ")[0] }}!</span
+        >Hello, {{ authStore.user?.displayName.split(" ")[0] }}!</span
       >
       <h1
         class="text-center text-[2.875rem] font-bold leading-[1.2] tracking-[-2px] text-neutral-900"
