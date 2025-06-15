@@ -12,6 +12,7 @@ export const useAuthStore = defineStore("auth", {
     user: null,
     loginError: null,
     signupError: null,
+    settingsError: null,
     authReady: false,
   }),
 
@@ -51,18 +52,18 @@ export const useAuthStore = defineStore("auth", {
 
     async updateUserProfile(name, profilePictureFile) {
       const { $auth, $storage } = useNuxtApp();
-      this.signupError = null;
+      this.settingsError = null;
 
       const validTypes = ["image/jpeg", "image/png"];
       const maxSize = 250 * 1024;
 
       if (!validTypes.includes(profilePictureFile.type)) {
-        this.signupError = "Only JPEG or PNG images are allowed.";
+        this.settingsError = "Only JPEG or PNG images are allowed.";
         return;
       }
 
       if (profilePictureFile.size > maxSize) {
-        this.signupError = "Profile picture must be under 250KB.";
+        this.settingsError = "Profile picture must be under 250KB.";
         return;
       }
 
@@ -87,7 +88,7 @@ export const useAuthStore = defineStore("auth", {
         const router = useRouter();
         router.push("/");
       } catch (error) {
-        this.signupError = error.message;
+        this.settingsError = error.message;
       }
     },
 

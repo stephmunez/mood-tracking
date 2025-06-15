@@ -70,8 +70,8 @@
       Start Tracking
     </button>
 
-    <p v-if="authStore.signupError" class="text-sm text-red-500">
-      {{ authStore.signupError }}
+    <p v-if="authStore.settingsError" class="text-sm text-red-500">
+      {{ authStore.settingsError }}
     </p>
   </form>
 </template>
@@ -104,14 +104,14 @@ const handleSubmit = async (e) => {
   console.log(name.value, profilePicture.value);
 
   if (!name.value || !profilePicture.value) {
-    authStore.signupError =
+    authStore.settingsError =
       "Please enter your name and upload a profile picture.";
     return;
   }
 
   await authStore.updateUserProfile(name.value, profilePicture.value);
 
-  if (!authStore.signupError) {
+  if (!authStore.settingsError) {
     router.push("/");
   }
 };
