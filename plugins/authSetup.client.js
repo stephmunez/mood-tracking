@@ -11,15 +11,18 @@ export default defineNuxtPlugin(() => {
 
   const redirectUser = () => {
     const { path } = router.currentRoute.value;
+    const isGuestRoute = GUEST_ONLY_ROUTES.includes(path);
+    const isProtectedRoute = PROTECTED_ROUTES.includes(path);
+    const hasOnboarded = authStore.user?.displayName;
 
     if (authStore.user) {
-      if (GUEST_ONLY_ROUTES.includes(path)) {
+      if (!hasOnboarded && path !== "/onboarding") {
+        router.push("/onboarding");
+      } else if (isGuestRoute) {
         router.push("/");
       }
-    }
-
-    if (!authStore.user) {
-      if (PROTECTED_ROUTES.includes(path)) {
+    } else {
+      if (isProtectedRoute) {
         router.push("/log-in");
       }
     }

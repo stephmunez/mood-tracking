@@ -57,7 +57,6 @@ export const useAuthStore = defineStore("auth", {
         };
 
         const router = useRouter();
-        router.push("/onboarding");
       } catch (error) {
         this.signupError = error.message;
       }

@@ -27,4 +27,8 @@
 useHead({
   title: "Mood Tracking | Onboarding",
 });
+
+definePageMeta({
+  middleware: "onboarding",
+});
 </script>
