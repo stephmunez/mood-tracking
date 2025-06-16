@@ -249,7 +249,12 @@ const sleepSummary = computed(() => {
 });
 
 const moodComparison = computed(() => {
-  if (previousFiveMoodAvg.value === null) return null;
+  if (previousFiveMoodAvg.value === null) {
+    return {
+      text: "Need more check-ins to compare",
+      img: "/images/icon-trend-same.svg",
+    };
+  }
 
   const current = lastFiveMoodAvg.value;
   const previous = previousFiveMoodAvg.value;
@@ -275,7 +280,12 @@ const moodComparison = computed(() => {
 });
 
 const sleepComparison = computed(() => {
-  if (previousFiveSleepAvg.value === null) return null;
+  if (previousFiveSleepAvg.value === null) {
+    return {
+      text: "Need more check-ins to compare",
+      img: "/images/icon-trend-same-white.svg",
+    };
+  }
 
   const current = lastFiveSleepAvg.value;
   const previous = previousFiveSleepAvg.value;
