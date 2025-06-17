@@ -83,7 +83,7 @@
             <div
               v-for="(trend, index) in moodAndSleepTrends"
               :key="index"
-              class="relative w-10 cursor-pointer rounded-full transition-all duration-300"
+              class="relative w-10 cursor-pointer rounded-full transition-all duration-700"
               :style="{
                 height: trend.height + 'px',
                 backgroundColor: trend.color,
