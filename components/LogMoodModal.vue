@@ -207,9 +207,9 @@
               v-if="currentStep === 4"
               class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50"
               @click="handleSubmit"
-              :disabled="selectedHour === null"
+              :disabled="!selectedHour || isSubmitting"
             >
-              Submit
+              {{ isSubmitting ? "Saving.." : "Submit" }}
             </button>
           </div>
 
@@ -238,6 +238,7 @@ const selectedFeelings = ref([]);
 const journalEntry = ref("");
 const selectedHour = ref(null);
 const currentStep = ref(1);
+const isSubmitting = ref(false);
 
 const moods = [
   { value: 2, image: "/images/icon-very-happy-color.svg", label: "Very Happy" },
@@ -310,6 +311,8 @@ const emitClose = () => {
 };
 
 const handleSubmit = async () => {
+  isSubmitting.value = true;
+
   const moodEntry = {
     createdAt: new Date().toISOString(),
     mood: selectedMood.value,
@@ -318,9 +321,14 @@ const handleSubmit = async () => {
     sleepHours: selectedHour.value,
   };
 
-  await moodEntriesStore.addMoodEntry(moodEntry);
-
-  emitClose();
+  try {
+    await moodEntriesStore.addMoodEntry(moodEntry);
+    emitClose();
+  } catch (error) {
+    console.error("Submission failed:", error);
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 
