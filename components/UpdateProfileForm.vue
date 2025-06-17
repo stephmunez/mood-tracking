@@ -68,9 +68,10 @@
 
     <button
       type="submit"
-      class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
+      class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0 disabled:cursor-not-allowed disabled:opacity-50"
+      :disabled="isSaving"
     >
-      Save Changes
+      {{ isSaving ? "Saving.." : "Save Changes" }}
     </button>
 
     <p
@@ -94,6 +95,7 @@ const emit = defineEmits(["close"]);
 const name = ref("");
 const profilePicture = ref(null);
 const profilePicturePreview = ref(null);
+const isSaving = ref(false);
 
 onMounted(() => {
   if (authStore.user) {
@@ -112,6 +114,7 @@ const handleFileChange = (e) => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  isSaving.value = true;
 
   await authStore.updateUserProfile(name.value, profilePicture.value);
 
@@ -119,5 +122,7 @@ const handleSubmit = async (e) => {
     router.push("/");
     emit("close");
   }
+
+  isSaving.value = false;
 };
 </script>
