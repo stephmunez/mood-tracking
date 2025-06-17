@@ -18,7 +18,7 @@
           Add your name and a profile picture to make Mood yours.
         </p>
       </div>
-      <OnboardingForm />
+      <UpdateProfileForm />
     </main>
   </div>
 </template>
