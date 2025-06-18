@@ -34,9 +34,10 @@
       <div class="flex w-full flex-col gap-2">
         <button
           type="submit"
-          class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
+          class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0 transition-opacity duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+          :disabled="isLoading"
         >
-          Sign Up
+          {{ isLoading ? "Signing up.." : "Sign Up" }}
         </button>
         <p
           v-if="authStore.signupError"
@@ -58,11 +59,15 @@
 <script setup>
 const email = ref("");
 const password = ref("");
+const isLoading = ref(false);
 const authStore = useAuthStore();
 
 const handleSignup = async (e) => {
   e.preventDefault();
+  isLoading.vale = true;
 
   await authStore.signup(email.value, password.value);
+
+  isLoading.value = false;
 };
 </script>
