@@ -68,7 +68,7 @@
 
     <button
       type="submit"
-      class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0 disabled:cursor-not-allowed disabled:opacity-50"
+      class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0 transition-opacity duration-300 disabled:cursor-not-allowed disabled:opacity-50"
       :disabled="isSaving"
     >
       {{

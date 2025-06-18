@@ -33,10 +33,11 @@
       <div class="flex w-full flex-col gap-2">
         <button
           type="submit"
-          class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0"
+          class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0 transition-opacity duration-300 disabled:cursor-not-allowed disabled:opacity-50"
           @click="handleLogin"
+          :disabled="isLoading"
         >
-          Log In
+          {{ isLoading ? "Logging in.." : "Log In" }}
         </button>
         <p
           v-if="authStore.loginError"
@@ -57,10 +58,15 @@
 <script setup>
 const email = ref("");
 const password = ref("");
+const isLoading = ref(false);
 const authStore = useAuthStore();
 
 const handleLogin = async (e) => {
   e.preventDefault();
+  isLoading.value = true;
+
   await authStore.login(email.value, password.value);
+
+  isLoading.value = false;
 };
 </script>

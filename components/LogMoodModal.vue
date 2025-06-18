@@ -205,7 +205,7 @@
 
             <button
               v-if="currentStep === 4"
-              class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+              class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-colors transition-opacity duration-300 disabled:cursor-not-allowed disabled:opacity-50"
               @click="handleSubmit"
               :disabled="!selectedHour || isSubmitting"
             >
