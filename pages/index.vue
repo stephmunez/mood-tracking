@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen w-full flex-col gap-16 pb-20">
+  <div class="flex min-h-screen w-full flex-col gap-16 pb-20 md:gap-12">
     <Heading
       @openlogmoodmodal="handleOpenLogMoodModal"
       @opensettingsmodal="handleOpenSettingsModal"
