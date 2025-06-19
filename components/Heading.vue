@@ -1,5 +1,7 @@
 <template>
-  <div class="flex w-full flex-col items-center gap-12 px-4 pt-8">
+  <div
+    class="flex w-full flex-col items-center gap-12 px-4 pt-8 md:px-8 md:pt-10"
+  >
     <nav class="relative flex w-full items-center justify-between">
       <Logo />
       <button
@@ -93,9 +95,9 @@
         class="flex w-full flex-col items-center gap-5"
       >
         <div
-          class="flex w-full flex-col items-center gap-8 rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-8"
+          class="flex w-full flex-col items-center gap-8 overflow-hidden rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-8 md:relative md:min-h-[340px] md:items-start md:justify-between md:p-8"
         >
-          <h2 class="flex flex-col text-center">
+          <h2 class="z-10 flex flex-col text-center md:text-start">
             <span
               class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900/70"
               >I'm feeling</span
@@ -112,14 +114,18 @@
               :src="todaysMoodSummary.img"
               width="200"
               height="200"
+              class="md:absolute md:-bottom-8 md:right-10 md:w-[320px]"
             />
           </transition>
 
           <transition name="fade" appear>
-            <div v-if="moodQuote" class="flex flex-col items-center gap-4">
+            <div
+              v-if="moodQuote"
+              class="z-10 flex flex-col items-center gap-4 md:w-5/12 md:items-start"
+            >
               <NuxtImg src="/images/icon-quote.svg" width="24" height="24" />
               <span
-                class="text-center text-lg font-medium italic leading-[1.3] tracking-normal text-neutral-900"
+                class="text-center text-lg font-medium italic leading-[1.3] tracking-normal text-neutral-900 md:text-start"
                 >"{{ moodQuote }}"</span
               >
             </div>
