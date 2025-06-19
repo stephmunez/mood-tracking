@@ -6,7 +6,7 @@
       @click.self="emitClose"
     >
       <div
-        class="relative flex w-full flex-col gap-6 rounded-2xl border border-solid border-blue-100 bg-white px-5 py-10 shadow-[0_8px_16px_rgba(32,37,41,0.08)]"
+        class="relative flex w-full flex-col gap-6 rounded-2xl border border-solid border-blue-100 bg-white px-5 py-10 shadow-[0_8px_16px_rgba(32,37,41,0.08)] md:max-w-[600px]"
       >
         <div class="flex w-full flex-col gap-2">
           <h2
