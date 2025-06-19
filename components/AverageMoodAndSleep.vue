@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-neutral-100 bg-neutral-0 px-4 py-5"
+    class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-neutral-100 bg-neutral-0 px-4 py-5 md:p-6"
   >
     <!-- Average Mood -->
     <div class="flex w-full flex-col gap-3">
@@ -19,7 +19,7 @@
       <div
         v-if="lastFiveMoodAvg !== null"
         :class="[
-          'relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-no-repeat px-4 py-5',
+          'relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-no-repeat px-4 py-5 md:p-5',
           moodSummary.bgClass,
         ]"
       >
@@ -55,7 +55,7 @@
       </div>
       <div
         v-else
-        class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-100 bg-no-repeat px-4 py-5"
+        class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-100 bg-no-repeat px-4 py-5 md:p-5"
       >
         <span
           class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
