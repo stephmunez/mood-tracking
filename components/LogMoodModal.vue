@@ -7,7 +7,7 @@
     >
       <Transition name="modal-fade">
         <div
-          class="relative flex w-full max-w-[600px] flex-col gap-6 rounded-2xl bg-white from-[#F5F5FF] from-[73%] to-[#E0E0FF] to-[100%] px-5 py-8 transition-all"
+          class="relative flex w-full max-w-[600px] flex-col gap-6 rounded-2xl bg-white from-[#F5F5FF] from-[73%] to-[#E0E0FF] to-[100%] px-5 py-8 transition-all md:px-10 md:py-12"
           style="
             background-image: linear-gradient(
               to bottom,
@@ -215,7 +215,7 @@
 
           <!-- Close Button -->
           <button
-            class="absolute right-5 top-5 flex h-6 w-6 items-center justify-center"
+            class="absolute right-5 top-5 flex h-6 w-6 items-center justify-center md:right-7 md:top-7"
             @click="emitClose"
           >
             <NuxtImg src="/images/icon-close.svg" width="15" height="15" />
