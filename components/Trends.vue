@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex w-full max-w-[768px] flex-col gap-5 rounded-2xl border border-solid border-blue-100 bg-neutral-0 py-5 pl-4 md:py-6 md:pl-6"
+    class="flex w-full max-w-[768px] flex-col gap-5 rounded-2xl border border-solid border-blue-100 bg-neutral-0 py-5 pl-4 md:gap-8 md:py-6 md:pl-6"
   >
     <h2
       class="text-[1.75rem] font-bold leading-[1.3] tracking-[-0.3px] text-neutral-900"
