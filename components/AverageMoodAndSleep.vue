@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-neutral-100 bg-neutral-0 px-4 py-5 md:p-6 lg:w-[40%] xl:w-[32%]"
+    class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-5 md:p-6 lg:w-[40%] xl:w-[32%]"
   >
     <!-- Average Mood -->
     <div class="flex w-full flex-col gap-3">
