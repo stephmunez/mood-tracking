@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-neutral-100 bg-neutral-0 px-4 py-5 md:p-6"
+    class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-neutral-100 bg-neutral-0 px-4 py-5 md:p-6 lg:w-[40%] xl:w-[32%]"
   >
     <!-- Average Mood -->
     <div class="flex w-full flex-col gap-3">
@@ -34,9 +34,14 @@
 
         <div
           v-if="moodComparison !== null"
-          class="flex w-full items-center gap-2"
+          class="flex w-full items-start gap-2"
         >
-          <NuxtImg :src="moodComparison.img" width="16" height="16" />
+          <NuxtImg
+            :src="moodComparison.img"
+            width="16"
+            height="16"
+            class="mt-[3px]"
+          />
           <span
             class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
             >{{ moodComparison.text }}</span
@@ -105,9 +110,14 @@
 
         <div
           v-if="sleepComparison !== null"
-          class="flex w-full items-center gap-2"
+          class="flex w-full items-start gap-2"
         >
-          <NuxtImg :src="sleepComparison.img" width="16" height="16" />
+          <NuxtImg
+            :src="sleepComparison.img"
+            width="16"
+            height="16"
+            class="mt-[3px]"
+          />
           <span
             class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-0"
             >{{ sleepComparison.text }}</span

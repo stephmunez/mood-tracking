@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex w-full max-w-[768px] flex-col gap-5 rounded-2xl border border-solid border-blue-100 bg-neutral-0 py-5 pl-4 md:gap-8 md:py-6 md:pl-6"
+    class="flex w-full max-w-[768px] flex-col gap-5 rounded-2xl border border-solid border-blue-100 bg-neutral-0 py-5 pl-4 md:gap-8 md:py-6 md:pl-6 lg:max-w-[57%] xl:max-w-[65%]"
   >
     <h2
       class="text-[1.75rem] font-bold leading-[1.3] tracking-[-0.3px] text-neutral-900"
@@ -8,7 +8,7 @@
       Mood and sleep trends
     </h2>
     <div class="l min-h-[316px] w-full">
-      <div class="flex min-h-[312px] gap-4">
+      <div class="flex min-h-[316px] gap-4">
         <div class="flex min-w-[70px] flex-col gap-10">
           <div class="flex items-center gap-[0.375rem]">
             <IconSleep fill="#57577B" width="12" height="12" />
