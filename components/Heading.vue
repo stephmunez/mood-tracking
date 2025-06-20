@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full flex-col items-center gap-12 px-4 pt-8 md:px-8 md:pt-10"
+    class="flex w-full max-w-[1440px] flex-col items-center gap-12 px-4 pt-8 md:px-8 md:pt-10 lg:gap-16 lg:px-32"
   >
     <nav class="relative flex w-full items-center justify-between">
       <Logo />
@@ -70,13 +70,13 @@
       </transition>
     </nav>
 
-    <div class="flex w-full flex-col items-center gap-4">
+    <div class="flex w-full flex-col items-center gap-4 lg:gap-[0.625rem]">
       <span
-        class="text-center text-2xl font-bold leading-[1.3] tracking-[-0.3px] text-blue-600"
+        class="text-center text-2xl font-bold leading-[1.3] tracking-[-0.3px] text-blue-600 lg:text-[2rem] lg:leading-[1.4]"
         >Hello, {{ authStore.user?.displayName.split(" ")[0] }}!</span
       >
       <h1
-        class="text-center text-[2.875rem] font-bold leading-[1.2] tracking-[-2px] text-neutral-900"
+        class="text-center text-[2.875rem] font-bold leading-[1.2] tracking-[-2px] text-neutral-900 lg:text-[3.25rem] lg:leading-[1.4]"
       >
         How are you feeling today?
       </h1>
@@ -87,15 +87,14 @@
       >
     </div>
 
-    <!-- Main content with improved transitions -->
     <transition name="slide-fade" mode="out-in">
       <div
         v-if="dataReady && todaysMoodEntry"
         key="mood-entry"
-        class="flex w-full flex-col items-center gap-5"
+        class="flex w-full flex-col items-center gap-5 lg:flex-row lg:gap-8"
       >
         <div
-          class="flex w-full flex-col items-center gap-8 overflow-hidden rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-8 md:relative md:min-h-[340px] md:items-start md:justify-between md:p-8"
+          class="flex w-full flex-col items-center gap-8 overflow-hidden rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-8 md:relative md:min-h-[340px] md:items-start md:justify-between md:p-8 lg:w-[57%]"
         >
           <h2 class="z-10 flex flex-col text-center md:text-start">
             <span
@@ -132,61 +131,63 @@
           </transition>
         </div>
 
-        <transition name="slide-up" appear>
-          <div
-            class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
-          >
-            <div class="flex items-center gap-3">
-              <IconSleep fill="#57577B" width="22" height="22" />
-              <h2
-                class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
-              >
-                Sleep
-              </h2>
-            </div>
-            <p
-              class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900"
+        <div class="flex w-full flex-col items-center gap-5 lg:w-[40%]">
+          <transition name="slide-up" appear>
+            <div
+              class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
             >
-              {{ todaysSleepSummary }}
-            </p>
-          </div>
-        </transition>
-
-        <transition name="slide-up" appear>
-          <div
-            class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
-          >
-            <div class="flex items-center gap-3">
-              <NuxtImg
-                src="/images/icon-reflection.svg"
-                width="22"
-                height="22"
-              />
-              <h2
-                class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
-              >
-                Reflection of the day
-              </h2>
-            </div>
-            <p
-              class="min-h-20 text-lg font-medium leading-[1.2] tracking-normal text-neutral-900"
-            >
-              {{ todaysMoodEntry.journalEntry }}
-            </p>
-            <div class="flex flex-wrap gap-3">
-              <transition-group name="tag-fade" appear>
-                <span
-                  v-for="(tag, index) in feelingsTags"
-                  :key="tag"
-                  :style="{ transitionDelay: `${index * 50}ms` }"
-                  class="font-medium italic leading-[1.3] tracking-normal text-neutral-600"
+              <div class="flex items-center gap-3">
+                <IconSleep fill="#57577B" width="22" height="22" />
+                <h2
+                  class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
                 >
-                  {{ tag }}
-                </span>
-              </transition-group>
+                  Sleep
+                </h2>
+              </div>
+              <p
+                class="text-[2rem] font-bold leading-[1.4] tracking-[-0.3px] text-neutral-900"
+              >
+                {{ todaysSleepSummary }}
+              </p>
             </div>
-          </div>
-        </transition>
+          </transition>
+
+          <transition name="slide-up" appear>
+            <div
+              class="flex w-full flex-col gap-4 rounded-2xl border border-solid border-blue-100 bg-neutral-0 p-5"
+            >
+              <div class="flex items-center gap-3">
+                <NuxtImg
+                  src="/images/icon-reflection.svg"
+                  width="22"
+                  height="22"
+                />
+                <h2
+                  class="text-lg font-medium leading-[1.2] tracking-normal text-neutral-600"
+                >
+                  Reflection of the day
+                </h2>
+              </div>
+              <p
+                class="min-h-20 text-lg font-medium leading-[1.2] tracking-normal text-neutral-900"
+              >
+                {{ todaysMoodEntry.journalEntry }}
+              </p>
+              <div class="flex flex-wrap gap-3">
+                <transition-group name="tag-fade" appear>
+                  <span
+                    v-for="(tag, index) in feelingsTags"
+                    :key="tag"
+                    :style="{ transitionDelay: `${index * 50}ms` }"
+                    class="font-medium italic leading-[1.3] tracking-normal text-neutral-600"
+                  >
+                    {{ tag }}
+                  </span>
+                </transition-group>
+              </div>
+            </div>
+          </transition>
+        </div>
       </div>
 
       <div
