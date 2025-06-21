@@ -12,12 +12,10 @@
           v-if="authStore.user?.photoURL"
           class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full"
         >
-          <NuxtImg
-            :src="authStore.user?.photoURL"
-            width="40"
-            height="40"
-            :placeholder="[50, 25, 75, 5]"
-            provider="static"
+          <img
+            :src="authStore.user.photoURL"
+            alt="User avatar"
+            class="h-10 w-10 rounded-full object-cover"
           />
         </div>
 
