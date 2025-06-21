@@ -17,6 +17,7 @@
             width="40"
             height="40"
             :placeholder="[50, 25, 75, 5]"
+            provider="static"
           />
         </div>
 
