@@ -136,7 +136,7 @@
                 <textarea
                   v-model="journalEntry"
                   placeholder="Today, I felt..."
-                  class="min-h-[150px] rounded-[10px] border border-solid border-neutral-300 bg-neutral-0 px-4 py-3 text-lg font-medium leading-[1.3] tracking-normal transition-colors duration-300 placeholder:italic focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-blue-600"
+                  class="min-h-[150px] rounded-[10px] border border-solid border-neutral-300 bg-neutral-0 px-4 py-3 text-lg font-medium leading-[1.3] tracking-normal transition-colors duration-300 placeholder:italic hover:border-neutral-900 focus:border-neutral-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-blue-600"
                   maxlength="150"
                 />
               </div>
@@ -184,7 +184,7 @@
           <div class="flex items-center justify-between gap-3">
             <button
               v-if="currentStep > 1"
-              class="w-full rounded-[10px] border border-blue-600 px-8 py-4 text-2xl font-normal text-blue-600"
+              class="w-full rounded-[10px] border border-blue-600 px-8 py-4 text-2xl font-normal text-blue-600 transition-colors duration-300 hover:border-blue-700 hover:text-blue-700 active:border-blue-700 active:text-blue-700"
               @click="currentStep--"
             >
               Back
@@ -192,7 +192,7 @@
 
             <button
               v-if="currentStep < 4"
-              class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+              class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-colors duration-300 hover:bg-blue-700 active:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               :disabled="
                 (currentStep === 1 && selectedMood === null) ||
                 (currentStep === 2 && selectedFeelings.length === 0) ||
@@ -205,7 +205,7 @@
 
             <button
               v-if="currentStep === 4"
-              class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-colors transition-opacity duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+              class="w-full rounded-[10px] bg-blue-600 px-8 py-4 text-2xl font-semibold text-neutral-0 transition-all duration-300 hover:bg-blue-700 active:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               @click="handleSubmit"
               :disabled="!selectedHour || isSubmitting"
             >
