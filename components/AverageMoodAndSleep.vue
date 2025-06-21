@@ -1,163 +1,166 @@
 <template>
-  <section
-    class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-5 md:p-6 lg:w-[40%] xl:w-[32%]"
-  >
-    <!-- Average Mood -->
-    <div class="flex w-full flex-col gap-3">
-      <div class="flex items-center gap-1">
-        <h2
-          class="text-xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
-        >
-          Average Mood
-        </h2>
-        <span
-          class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600"
-          >(Last 5 Check-ins)</span
-        >
-      </div>
+  <transition name="fade">
+    <section
+      v-if="!loading"
+      class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-5 md:p-6 lg:w-[40%] xl:w-[32%]"
+    >
+      <!-- Average Mood -->
+      <div class="flex w-full flex-col gap-3">
+        <div class="flex items-center gap-1">
+          <h2
+            class="text-xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
+          >
+            Average Mood
+          </h2>
+          <span
+            class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600"
+            >(Last 5 Check-ins)</span
+          >
+        </div>
 
-      <div
-        v-if="lastFiveMoodAvg !== null"
-        :class="[
-          'relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-no-repeat px-4 py-5 md:p-5',
-          moodSummary.bgClass,
-        ]"
-      >
-        <div class="flex w-full items-center gap-4">
-          <NuxtImg :src="moodSummary.img" width="24" height="24" />
+        <div
+          v-if="lastFiveMoodAvg !== null"
+          :class="[
+            'relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-no-repeat px-4 py-5 md:p-5',
+            moodSummary.bgClass,
+          ]"
+        >
+          <div class="flex w-full items-center gap-4">
+            <NuxtImg :src="moodSummary.img" width="24" height="24" />
+            <span
+              class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
+            >
+              {{ moodSummary.title }}
+            </span>
+          </div>
+
+          <div
+            v-if="moodComparison !== null"
+            class="flex w-full items-start gap-2"
+          >
+            <NuxtImg
+              :src="moodComparison.img"
+              width="16"
+              height="16"
+              class="mt-[3px]"
+            />
+            <span
+              class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
+              >{{ moodComparison.text }}</span
+            >
+          </div>
+
+          <div
+            class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
+          >
+            <NuxtImg
+              src="/images/bg-pattern-averages.svg"
+              width="243"
+              height="251"
+            />
+          </div>
+        </div>
+        <div
+          v-else
+          class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-100 bg-no-repeat px-4 py-5 md:p-5"
+        >
           <span
             class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
+            >Keep tracking!</span
           >
-            {{ moodSummary.title }}
-          </span>
-        </div>
-
-        <div
-          v-if="moodComparison !== null"
-          class="flex w-full items-start gap-2"
-        >
-          <NuxtImg
-            :src="moodComparison.img"
-            width="16"
-            height="16"
-            class="mt-[3px]"
-          />
           <span
-            class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
-            >{{ moodComparison.text }}</span
+            class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600"
+            >Log 5 check-ins to see your average mood.</span
           >
+          <div
+            class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
+          >
+            <NuxtImg
+              src="/images/bg-pattern-averages.svg"
+              width="243"
+              height="251"
+            />
+          </div>
         </div>
+      </div>
 
-        <div
-          class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
-        >
-          <NuxtImg
-            src="/images/bg-pattern-averages.svg"
-            width="243"
-            height="251"
-          />
-        </div>
-      </div>
-      <div
-        v-else
-        class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-100 bg-no-repeat px-4 py-5 md:p-5"
-      >
-        <span
-          class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
-          >Keep tracking!</span
-        >
-        <span
-          class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600"
-          >Log 5 check-ins to see your average mood.</span
-        >
-        <div
-          class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
-        >
-          <NuxtImg
-            src="/images/bg-pattern-averages.svg"
-            width="243"
-            height="251"
-          />
-        </div>
-      </div>
-    </div>
-
-    <!-- Average Sleep -->
-    <div class="flex w-full flex-col gap-3">
-      <div class="flex items-center gap-1">
-        <h2
-          class="text-xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
-        >
-          Average Sleep
-        </h2>
-        <span
-          class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600"
-          >(Last 5 Check-ins)</span
-        >
-      </div>
-      <div
-        v-if="lastFiveSleepAvg !== null"
-        class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-600 bg-no-repeat px-4 py-5"
-      >
-        <div class="flex w-full items-center gap-4">
-          <IconSleep fill="#FFFFFF" width="24" height="24" />
+      <!-- Average Sleep -->
+      <div class="flex w-full flex-col gap-3">
+        <div class="flex items-center gap-1">
+          <h2
+            class="text-xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
+          >
+            Average Sleep
+          </h2>
           <span
-            class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-0"
+            class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600"
+            >(Last 5 Check-ins)</span
           >
-            {{ sleepSummary }}
-          </span>
         </div>
-
         <div
-          v-if="sleepComparison !== null"
-          class="flex w-full items-start gap-2"
+          v-if="lastFiveSleepAvg !== null"
+          class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-600 bg-no-repeat px-4 py-5"
         >
-          <NuxtImg
-            :src="sleepComparison.img"
-            width="16"
-            height="16"
-            class="mt-[3px]"
-          />
+          <div class="flex w-full items-center gap-4">
+            <IconSleep fill="#FFFFFF" width="24" height="24" />
+            <span
+              class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-0"
+            >
+              {{ sleepSummary }}
+            </span>
+          </div>
+
+          <div
+            v-if="sleepComparison !== null"
+            class="flex w-full items-start gap-2"
+          >
+            <NuxtImg
+              :src="sleepComparison.img"
+              width="16"
+              height="16"
+              class="mt-[3px]"
+            />
+            <span
+              class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-0"
+              >{{ sleepComparison.text }}</span
+            >
+          </div>
+
+          <div
+            class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
+          >
+            <NuxtImg
+              src="/images/bg-pattern-averages.svg"
+              width="243"
+              height="251"
+            />
+          </div>
+        </div>
+        <div
+          v-else
+          class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-100 bg-no-repeat px-4 py-5"
+        >
           <span
-            class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-0"
-            >{{ sleepComparison.text }}</span
+            class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
+            >Not enough data yet!</span
           >
-        </div>
-
-        <div
-          class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
-        >
-          <NuxtImg
-            src="/images/bg-pattern-averages.svg"
-            width="243"
-            height="251"
-          />
-        </div>
-      </div>
-      <div
-        v-else
-        class="relative flex min-h-[150px] w-full flex-col justify-center gap-3 overflow-hidden rounded-2xl bg-blue-100 bg-no-repeat px-4 py-5"
-      >
-        <span
-          class="z-10 text-2xl font-semibold leading-[1.4] tracking-normal text-neutral-900"
-          >Not enough data yet!</span
-        >
-        <span
-          class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600"
-          >Track 5 nights to view average sleep.</span
-        >
-        <div
-          class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
-        >
-          <NuxtImg
-            src="/images/bg-pattern-averages.svg"
-            width="243"
-            height="251"
-          />
+          <span
+            class="z-10 text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600"
+            >Track 5 nights to view average sleep.</span
+          >
+          <div
+            class="top-[calc(50% - 251px)] pointer-events-none absolute -right-[182px]"
+          >
+            <NuxtImg
+              src="/images/bg-pattern-averages.svg"
+              width="243"
+              height="251"
+            />
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </transition>
 </template>
 
 <script setup>
@@ -167,6 +170,16 @@ const { moodEntries } = defineProps({
     default: () => [],
   },
 });
+
+const loading = ref(true);
+
+watch(
+  () => moodEntries,
+  (entries) => {
+    loading.value = !entries || entries.length === 0;
+  },
+  { immediate: true },
+);
 
 const lastFiveMoodAvg = computed(() => {
   const lastFive = moodEntries.slice(-5);
@@ -320,3 +333,25 @@ const sleepComparison = computed(() => {
   }
 });
 </script>
+
+<style scoped>
+/* Original fade transition */
+.fade-enter-active,
+.fade-leave-active {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+</style>

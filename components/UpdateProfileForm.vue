@@ -11,7 +11,7 @@
           type="text"
           id="name"
           v-model="name"
-          class="rounded-[10px] border border-solid border-neutral-300 px-4 py-3 text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600 placeholder:text-neutral-300"
+          class="rounded-[10px] border border-solid border-neutral-300 px-4 py-3 text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-600 transition-colors duration-300 placeholder:text-neutral-300 hover:border-neutral-900 focus:border-neutral-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-blue-700 active:border-neutral-900"
           placeholder="Your Name"
         />
       </div>
@@ -58,7 +58,7 @@
 
           <label
             for="profilePic"
-            class="w-max cursor-pointer rounded-lg border border-solid border-neutral-300 px-4 py-2 text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900"
+            class="w-max cursor-pointer rounded-lg border border-solid border-neutral-300 px-4 py-2 text-lg font-normal leading-[1.4] tracking-[-0.3px] text-neutral-900 hover:border-neutral-900 active:border-neutral-900"
           >
             Upload
           </label>
@@ -68,7 +68,7 @@
 
     <button
       type="submit"
-      class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0 transition-opacity duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+      class="h-14 w-full rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0 transition-all duration-300 hover:bg-blue-700 active:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
       :disabled="isSaving"
     >
       {{
