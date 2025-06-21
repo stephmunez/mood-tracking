@@ -1,192 +1,195 @@
 <template>
-  <section
-    class="flex w-full max-w-[768px] flex-col gap-5 rounded-2xl border border-solid border-blue-100 bg-neutral-0 py-5 pl-4 md:gap-8 md:py-6 md:pl-6 lg:max-w-[57%] xl:max-w-[65%]"
-  >
-    <h2
-      class="text-[1.75rem] font-bold leading-[1.3] tracking-[-0.3px] text-neutral-900"
+  <transition name="fade">
+    <section
+      v-if="!loading"
+      class="flex w-full max-w-[768px] flex-col gap-5 rounded-2xl border border-solid border-blue-100 bg-neutral-0 py-5 pl-4 md:gap-8 md:py-6 md:pl-6 lg:max-w-[57%] xl:max-w-[65%]"
     >
-      Mood and sleep trends
-    </h2>
-    <div class="l min-h-[316px] w-full">
-      <div class="flex min-h-[316px] gap-4">
-        <div class="flex min-w-[70px] flex-col gap-10">
-          <div class="flex items-center gap-[0.375rem]">
-            <IconSleep fill="#57577B" width="12" height="12" />
-            <span
-              class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
-              >9+ hours</span
-            >
-          </div>
-          <div class="flex items-center gap-[0.375rem]">
-            <IconSleep fill="#57577B" width="12" height="12" />
-            <span
-              class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
-              >7-8 hours</span
-            >
-          </div>
-          <div class="flex items-center gap-[0.375rem]">
-            <IconSleep fill="#57577B" width="12" height="12" />
-            <span
-              class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
-              >5-6 hours</span
-            >
-          </div>
-          <div class="flex items-center gap-[0.375rem]">
-            <IconSleep fill="#57577B" width="12" height="12" />
-            <span
-              class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
-              >3-4 hours</span
-            >
-          </div>
-          <div class="flex items-center gap-[0.375rem]">
-            <IconSleep fill="#57577B" width="12" height="12" />
-            <span
-              class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
-              >0-2 hours</span
-            >
-          </div>
-        </div>
-        <div
-          class="relative flex min-h-[316px] w-[calc(100%-20px)] flex-col gap-[55px] overflow-x-auto md:pr-7"
-          ref="scrollContainer"
-        >
-          <div class="flex min-w-[614px] flex-col gap-10">
-            <div
-              v-for="n in 5"
-              :key="n"
-              class="flex h-[13.2px] w-full items-center"
-            >
-              <div class="h-px w-full bg-blue-100/30"></div>
-            </div>
-          </div>
-          <div class="flex min-w-[614px] gap-4">
-            <div
-              v-for="(day, index) in last11Days"
-              :key="index"
-              class="flex h-8 w-10 flex-col items-center gap-[0.375rem]"
-            >
+      <h2
+        class="text-[1.75rem] font-bold leading-[1.3] tracking-[-0.3px] text-neutral-900"
+      >
+        Mood and sleep trends
+      </h2>
+      <div class="l min-h-[316px] w-full">
+        <div class="flex min-h-[316px] gap-4">
+          <div class="flex min-w-[70px] flex-col gap-10">
+            <div class="flex items-center gap-[0.375rem]">
+              <IconSleep fill="#57577B" width="12" height="12" />
               <span
                 class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
+                >9+ hours</span
               >
-                {{ day.month }}
-              </span>
+            </div>
+            <div class="flex items-center gap-[0.375rem]">
+              <IconSleep fill="#57577B" width="12" height="12" />
               <span
-                class="text-[0.813rem] font-semibold leading-none tracking-normal text-neutral-900"
+                class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
+                >7-8 hours</span
               >
-                {{ day.date }}
-              </span>
+            </div>
+            <div class="flex items-center gap-[0.375rem]">
+              <IconSleep fill="#57577B" width="12" height="12" />
+              <span
+                class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
+                >5-6 hours</span
+              >
+            </div>
+            <div class="flex items-center gap-[0.375rem]">
+              <IconSleep fill="#57577B" width="12" height="12" />
+              <span
+                class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
+                >3-4 hours</span
+              >
+            </div>
+            <div class="flex items-center gap-[0.375rem]">
+              <IconSleep fill="#57577B" width="12" height="12" />
+              <span
+                class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
+                >0-2 hours</span
+              >
             </div>
           </div>
           <div
-            class="absolute bottom-12 left-0 flex min-w-[614px] items-end gap-4"
+            class="relative flex min-h-[316px] w-[calc(100%-20px)] flex-col gap-[55px] overflow-x-auto md:pr-7"
+            ref="scrollContainer"
           >
+            <div class="flex min-w-[614px] flex-col gap-10">
+              <div
+                v-for="n in 5"
+                :key="n"
+                class="flex h-[13.2px] w-full items-center"
+              >
+                <div class="h-px w-full bg-blue-100/30"></div>
+              </div>
+            </div>
+            <div class="flex min-w-[614px] gap-4">
+              <div
+                v-for="(day, index) in last11Days"
+                :key="index"
+                class="flex h-8 w-10 flex-col items-center gap-[0.375rem]"
+              >
+                <span
+                  class="text-xs font-normal leading-[1.1] tracking-normal text-neutral-600"
+                >
+                  {{ day.month }}
+                </span>
+                <span
+                  class="text-[0.813rem] font-semibold leading-none tracking-normal text-neutral-900"
+                >
+                  {{ day.date }}
+                </span>
+              </div>
+            </div>
             <div
-              v-for="(trend, index) in moodAndSleepTrends"
-              :key="index"
-              class="relative w-10 cursor-pointer rounded-full transition-all duration-700"
-              :style="{
-                height: trend.height + 'px',
-                backgroundColor: trend.color,
-              }"
-              @click.stop="
-                () => {
-                  selectedBarPopover = index;
-                }
-              "
+              class="absolute bottom-12 left-0 flex min-w-[614px] items-end gap-4"
             >
               <div
-                v-if="trend.height > 0"
-                class="absolute left-[5px] top-[5px]"
+                v-for="(trend, index) in moodAndSleepTrends"
+                :key="index"
+                class="relative w-10 cursor-pointer rounded-full transition-all duration-700"
+                :style="{
+                  height: trend.height + 'px',
+                  backgroundColor: trend.color,
+                }"
+                @click.stop="
+                  () => {
+                    selectedBarPopover = index;
+                  }
+                "
               >
-                <NuxtImg :src="trend.icon" width="30" height="30" />
-              </div>
-
-              <transition name="fade">
                 <div
-                  v-if="selectedBarPopover === index"
-                  class="absolute z-50 flex w-44 flex-col gap-3 rounded-[10px] border border-solid border-blue-100 bg-white p-3 shadow-[0_4px_7px_rgba(32,33,77,0.16)]"
-                  :style="{
-                    top: `${trend.height - 262}px`,
-                    right: `${index < 4 ? -184 : 48}px`,
-                  }"
-                  v-click-outside="() => (selectedBarPopover = null)"
+                  v-if="trend.height > 0"
+                  class="absolute left-[5px] top-[5px]"
                 >
-                  <div class="flex w-full flex-col gap-2">
-                    <h3
-                      class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
-                    >
-                      Mood
-                    </h3>
-                    <div class="flex items-center gap-[0.375rem]">
-                      <NuxtImg
-                        :src="trend.iconColored"
-                        width="16"
-                        height="16"
-                      />
+                  <NuxtImg :src="trend.icon" width="30" height="30" />
+                </div>
+
+                <transition name="fade">
+                  <div
+                    v-if="selectedBarPopover === index"
+                    class="absolute z-50 flex w-44 flex-col gap-3 rounded-[10px] border border-solid border-blue-100 bg-white p-3 shadow-[0_4px_7px_rgba(32,33,77,0.16)]"
+                    :style="{
+                      top: `${trend.height - 262}px`,
+                      right: `${index < 4 ? -184 : 48}px`,
+                    }"
+                    v-click-outside="() => (selectedBarPopover = null)"
+                  >
+                    <div class="flex w-full flex-col gap-2">
+                      <h3
+                        class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                      >
+                        Mood
+                      </h3>
+                      <div class="flex items-center gap-[0.375rem]">
+                        <NuxtImg
+                          :src="trend.iconColored"
+                          width="16"
+                          height="16"
+                        />
+                        <span
+                          class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                          >{{ trend.moodLabel }}</span
+                        >
+                      </div>
+                    </div>
+                    <div class="flex w-full flex-col gap-2">
+                      <h3
+                        class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                      >
+                        Sleep
+                      </h3>
                       <span
                         class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
-                        >{{ trend.moodLabel }}</span
+                        >{{ trend.sleepLabel }}</span
                       >
                     </div>
-                  </div>
-                  <div class="flex w-full flex-col gap-2">
-                    <h3
-                      class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
-                    >
-                      Sleep
-                    </h3>
-                    <span
-                      class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
-                      >{{ trend.sleepLabel }}</span
-                    >
-                  </div>
-                  <div class="flex w-full flex-col gap-2">
-                    <h3
-                      class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
-                    >
-                      Reflection
-                    </h3>
-                    <span
-                      class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
-                      >{{ trend.journalEntry }}</span
-                    >
-                  </div>
-                  <div class="flex w-full flex-col gap-2">
-                    <h3
-                      class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
-                    >
-                      Tags
-                    </h3>
-                    <span
-                      class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
-                      >{{ trend.feelings.join(", ") }}</span
-                    >
-                  </div>
+                    <div class="flex w-full flex-col gap-2">
+                      <h3
+                        class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                      >
+                        Reflection
+                      </h3>
+                      <span
+                        class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                        >{{ trend.journalEntry }}</span
+                      >
+                    </div>
+                    <div class="flex w-full flex-col gap-2">
+                      <h3
+                        class="text-[0.813rem] font-semibold leading-[1] tracking-normal text-neutral-600"
+                      >
+                        Tags
+                      </h3>
+                      <span
+                        class="text-[0.938rem] font-normal leading-[1.4] tracking-[-0.3px]"
+                        >{{ trend.feelings.join(", ") }}</span
+                      >
+                    </div>
 
-                  <div
-                    class="absolute z-50 h-3 w-3"
-                    :style="{
-                      bottom: `${trend.height - 40}px`,
-                      right: `${index < 4 ? 171 : -8}px`,
-                      transform: `${index < 4 ? 'scaleX(-1)' : 'scaleX(1)'}`,
-                    }"
-                  >
-                    <NuxtImg
-                      src="/images/icon-triangle.svg"
-                      width="12"
-                      height="12"
-                    />
+                    <div
+                      class="absolute z-50 h-3 w-3"
+                      :style="{
+                        bottom: `${trend.height - 40}px`,
+                        right: `${index < 4 ? 171 : -8}px`,
+                        transform: `${index < 4 ? 'scaleX(-1)' : 'scaleX(1)'}`,
+                      }"
+                    >
+                      <NuxtImg
+                        src="/images/icon-triangle.svg"
+                        width="12"
+                        height="12"
+                      />
+                    </div>
                   </div>
-                </div>
-              </transition>
+                </transition>
+              </div>
+
+              <!-- 49,  102, 156, 208, 262-->
             </div>
-
-            <!-- 49,  102, 156, 208, 262-->
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </transition>
 </template>
 
 <script setup>
@@ -196,6 +199,16 @@ const { moodEntries } = defineProps({
     default: () => [],
   },
 });
+
+const loading = ref(true);
+
+watch(
+  () => moodEntries,
+  (entries) => {
+    loading.value = !entries || entries.length === 0;
+  },
+  { immediate: true },
+);
 
 const selectedBarPopover = ref(null);
 const last11Days = ref([]);
@@ -303,12 +316,23 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Original fade transition */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+  transform: translateY(10px) scale(0.98);
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 </style>
