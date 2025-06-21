@@ -4,10 +4,6 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
-  image: {
-    provider: "ipx",
-    domains: ["firebasestorage.googleapis.com"],
-  },
   modules: ["@nuxt/image", "@nuxtjs/tailwindcss", "@pinia/nuxt"],
   plugins: ["@/plugins/firebase.client.js", "@/plugins/authSetup.client.js"],
   app: {
