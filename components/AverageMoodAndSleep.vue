@@ -1,6 +1,6 @@
 <template>
   <section
-    class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-neutral-100 bg-neutral-0 px-4 py-5 md:p-6 lg:w-[40%] xl:w-[32%]"
+    class="flex w-full flex-col gap-6 rounded-2xl border border-solid border-blue-100 bg-neutral-0 px-4 py-5 md:p-6 lg:w-[40%] xl:w-[32%]"
   >
     <!-- Average Mood -->
     <div class="flex w-full flex-col gap-3">
@@ -278,7 +278,7 @@ const moodComparison = computed(() => {
     };
   } else if (diff > 0) {
     return {
-      text: "Increase from the previous 5 check-in",
+      text: "Increase from the previous 5 check-ins",
       img: "/images/icon-trend-increase.svg",
     };
   } else {
@@ -309,7 +309,7 @@ const sleepComparison = computed(() => {
     };
   } else if (diff > 0) {
     return {
-      text: "Increase from the previous 5 check-in",
+      text: "Increase from the previous 5 check-ins",
       img: "/images/icon-trend-increase-white.svg",
     };
   } else {
