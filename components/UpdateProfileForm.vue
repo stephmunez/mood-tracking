@@ -21,11 +21,10 @@
           v-if="profilePicturePreview"
           class="flex h-16 min-w-16 items-center justify-center overflow-hidden rounded-full"
         >
-          <NuxtImg
+          <img
             :src="profilePicturePreview"
-            width="64"
-            height="64"
-            :placeholder="[50, 25, 75, 5]"
+            alt="User avatar"
+            class="h-16 w-16 rounded-full object-cover"
           />
         </div>
         <NuxtImg
