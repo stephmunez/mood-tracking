@@ -4,7 +4,7 @@
   >
     <Logo />
     <main
-      class="flex w-full flex-col gap-8 rounded-2xl bg-neutral-0 px-4 py-10 text-neutral-500 shadow-[0_8px_16px_rgba(32,37,41,0.08)]"
+      class="flex w-full max-w-[530px] flex-col gap-8 rounded-2xl bg-neutral-0 px-4 py-10 text-neutral-500 shadow-[0_8px_16px_rgba(32,37,41,0.08)] md:px-8"
     >
       <div class="flex w-full flex-col gap-2">
         <h1
