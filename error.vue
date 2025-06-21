@@ -16,14 +16,24 @@
       <NuxtLink
         to="/"
         class="flex h-14 w-56 transform items-center justify-center rounded-[10px] bg-blue-600 text-xl leading-[1.4] tracking-normal text-neutral-0 transition-all duration-200 hover:scale-105 hover:bg-blue-700 active:scale-95"
-        >Go back home</NuxtLink
       >
+        Go back home
+      </NuxtLink>
     </div>
   </main>
 </template>
 
 <script setup>
-defineProps({
-  error: Object,
+const props = defineProps({
+  error: {
+    type: Object,
+    required: true,
+  },
 });
+
+useHead({
+  title: `Mood Tracking | ${props.error.statusCode}`,
+});
+
+console.log(props.error);
 </script>
