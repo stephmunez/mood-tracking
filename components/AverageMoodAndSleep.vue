@@ -278,7 +278,7 @@ const moodComparison = computed(() => {
     };
   } else if (diff > 0) {
     return {
-      text: "Increase from the previous 5 check-in",
+      text: "Increase from the previous 5 check-ins",
       img: "/images/icon-trend-increase.svg",
     };
   } else {
@@ -309,7 +309,7 @@ const sleepComparison = computed(() => {
     };
   } else if (diff > 0) {
     return {
-      text: "Increase from the previous 5 check-in",
+      text: "Increase from the previous 5 check-ins",
       img: "/images/icon-trend-increase-white.svg",
     };
   } else {
