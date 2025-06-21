@@ -48,7 +48,12 @@
           <div class="pointer-events-none h-px w-full bg-blue-100"></div>
           <button
             class="flex items-center gap-[0.625rem]"
-            @click="$emit('opensettingsmodal')"
+            @click="
+              () => {
+                $emit('opensettingsmodal');
+                showDropdown = !showDropdown;
+              }
+            "
           >
             <NuxtImg src="/images/icon-settings.svg" width="16" height="16" />
             <span
